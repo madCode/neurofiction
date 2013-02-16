@@ -1,0 +1,4 @@
+outsight
+========
+
+Insight/Outsight EEG
