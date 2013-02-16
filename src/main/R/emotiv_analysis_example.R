@@ -1,13 +1,18 @@
 # Comparing two datasets
 
-source("/Users/hannu/Documents/Projects/outsight/src/main/R/emotiv_helper_functions.R")
-source("/Users/hannu/Documents/Projects/outsight/src/main/R/emotiv_analysis_functions.R")
+source("emotiv_helper_functions.R")
+source("emotiv_analysis_functions.R")
 
 listEmotivSessions()
 
 # Load data into data frames
-hannu.daydreaming <- loadEmotivSession("Daydreaming")
-hannu.island <- loadEmotivSession("Hannu: Island of Doctor Death")
+sam.bored <- loadEmotivSession("Sam - Zelazny 2")
+sam.interested <- loadEmotivSession("Sam - Wilde Happy PRince")
 
 # Compare 
 sensorHistogramComparisonGrid(hannu.daydreaming,hannu.island)
+
+# TODO: data cleanup ideas
+#
+# * exclude when gyro movements are high
+# * exclude when variance in a 1 second period is very high
