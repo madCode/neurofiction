@@ -69,8 +69,8 @@ histo.2 <- hist(eeg.data2[[sensor]],breaks=1000,plot=FALSE)
 ymax <- max(max(histo.1$density),max(histo.2$density))
 
 
-plot(histo.1,col=rgb(0,0,1,1/4),ylim=c(0,ymax),border=rgb(0,0,0,0),freq=FALSE,main=sensor)  # first histogram
-plot(histo.2,col=rgb(1,0,0,1/4),add=T,border=rgb(0,0,0,0),freq=FALSE)
+plot(histo.1,col=rgb(0,0,1,1/4),ylim=c(0,ymax),xlab="",border=rgb(0,0,0,0),freq=FALSE,main=sensor)  # first histogram
+plot(histo.2,col=rgb(1,0,0,1/4),add=T,border=rgb(0,0,0,0),xlab="",freq=FALSE)
 	
 		
 }
