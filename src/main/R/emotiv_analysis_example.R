@@ -10,7 +10,7 @@ sam.bored <- loadEmotivSession("Sam - Zelazny 2")
 sam.interested <- loadEmotivSession("Sam - Wilde Happy PRince")
 
 # Compare 
-sensorHistogramComparisonGrid(hannu.daydreaming,hannu.island)
+sensorHistogramComparisonGrid(sam.bored, sam.interested)
 
 # TODO: data cleanup ideas
 #

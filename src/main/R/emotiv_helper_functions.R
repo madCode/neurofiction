@@ -24,6 +24,8 @@ listEmotivSessions <- function(database.name="zoku"){
   con <- dbConnect(drv,dbname=database.name,user="postgres") 
   
   sessions <- dbGetQuery(con,"select * from emotivsession") 
+  dbDisconnect(con)
+  
   return(sessions$name)
   
   
@@ -79,7 +81,9 @@ loadEmotivSession <- function(session.name,database.name = "zoku"){
   }
   # TODO add some error handling
   # TODO add a time vector generator so plotting becomes easier... 
- return(session.results)
+ dbDisconnect(con)
+  
+  return(session.results)
   
 }
 
@@ -99,10 +103,15 @@ loadEmotivTimeInterval <- function(timestamp1,timestamp2,database.name = "zoku")
   # Load database driver and open a connection. 
   drv <- dbDriver("PostgreSQL")
   con <- dbConnect(drv,dbname=database.name,user="postgres")
-  
+
   # Query the database. 
   interval.data <- dbGetQuery(con,paste("select * from emotivdatum where timestamp between '",timestamp1,"'::timestamp"," and '",timestamp2,"'::timestamp",sep=""))
+
+  dbDisconnect(con)
+  
   return(interval.data)
+  
+  
 }
 
 
