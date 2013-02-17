@@ -10,13 +10,15 @@ organization := "com.github.fommil"
 scalaVersion := "2.10.0"
 
 /** Dependencies */
-resolvers += "Typesafe Repository" at "http://repo.typesafe.com/typesafe/releases/"
+resolvers += "Local Maven" at Path.userHome.asFile.toURI.toURL + ".m2/repository"
 
-resolvers += "Typesafe Snapshot Repository" at "http://repo.typesafe.com/typesafe/snapshots/"
+resolvers += "Sonatype Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots/"
 
-resolvers += "Sonatype Repository" at "https://oss.sonatype.org/content/repositories/releases/"
+resolvers += "Sonatype" at "https://oss.sonatype.org/content/repositories/releases/"
 
-resolvers += "Sonatype Snapshot Repository" at "https://oss.sonatype.org/content/repositories/snapshots/"
+resolvers += "Typesafe Snapshots" at "http://repo.typesafe.com/typesafe/snapshots/"
+
+resolvers += "Typesafe" at "http://repo.typesafe.com/typesafe/releases/"
 
 
 libraryDependencies <<= scalaVersion { scala_version => 
@@ -24,6 +26,7 @@ libraryDependencies <<= scalaVersion { scala_version =>
         "com.github.fommil"    %  "java-logging"        % "1.0-SNAPSHOT",
         // "com.github.fommil" %  "scala-java-logging"  % "1.0-SNAPSHOT",
         "com.github.fommil"    %  "emokit"              % "1.0-SNAPSHOT",
+        "org.springframework"  %  "spring-core"         % "3.2.1.RELEASE" intransitive(),
         "com.typesafe"         %  "config"              % "1.0.0",
         "com.typesafe.akka"    %% "akka-contrib"        % "2.1.0",
         "org.specs2"           %% "specs2"              % "1.13" % "test"
