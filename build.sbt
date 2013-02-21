@@ -10,15 +10,15 @@ organization := "com.github.fommil"
 scalaVersion := "2.10.0"
 
 /** Dependencies */
-resolvers += "Local Maven" at Path.userHome.asFile.toURI.toURL + ".m2/repository"
+resolvers += Resolver.mavenLocal
 
-resolvers += "Sonatype Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots/"
+resolvers += Resolver.sonatypeRepo("releases")
 
-resolvers += "Sonatype" at "https://oss.sonatype.org/content/repositories/releases/"
+resolvers += Resolver.sonatypeRepo("snapshots")
 
-resolvers += "Typesafe Snapshots" at "http://repo.typesafe.com/typesafe/snapshots/"
+resolvers += Resolver.typesafeRepo("releases")
 
-resolvers += "Typesafe" at "http://repo.typesafe.com/typesafe/releases/"
+resolvers += Resolver.typesafeRepo("snapshots")
 
 
 libraryDependencies <<= scalaVersion { scala_version => 
