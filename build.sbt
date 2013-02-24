@@ -1,4 +1,5 @@
 // mkdir -p src/{main,test}/{java,scala,R}/com/github/fommil/outsight
+// NOTE: Maven is the primary build system, see https://github.com/sbt/sbt/issues/679
 
 /** Project */
 name := "outsight"
