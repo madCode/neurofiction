@@ -1,4 +1,4 @@
-Little by little, we gather all her pieces together, in the glass coffin. Her emails, her Facebook updates, her health records. The duck-face pictures, the cosplay posing. The blurry TV footage from the accident, the pale angel with black caked blood on her forehad.  
+Little by little, we gather all her pieces together, in the glass coffin. Her emails, her Facebook updates, her health records. The duck-face pictures, the cosplay posing. The video from the convention, the one where she smiles. 
 
 It takes hours of coding in the dark. Our faces are cratered alien planets in the monitor glow, greasy from lack of sleep. The flat is hot with the breath of our machines. 
 
@@ -38,7 +38,7 @@ She kissed Jyri's cheek.
 
 Tell the others goodbye for me. 
 
-Her eyes were green. Her breath smelled sweet. Jyri closed his eyes. The door slammed shut, and she was gone. 
+Her breath smelled sweet. Jyri closed his eyes. When he opened them, he saw her lying on the floor, green eyes wide open. It was only then that he saw the jar of pills, in her hand.
 
 That was how Lumi left us. 
 

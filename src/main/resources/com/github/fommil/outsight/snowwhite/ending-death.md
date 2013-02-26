@@ -1,69 +1,53 @@
-	
-
-
-
-
-
-
 I am not who you think I am. 
 
 I am death, and you should stay away from me. 
 
-It's not personal. You woke me up, even if I had to die, for an eyeblink. And you look nice, sitting there in your white coat, with your slicked-back hair and Biaritz tan and expensive watch and a faint smell of pine in your aftershave. I feel a bit  warm, like when I bummed cigarettes from the boys at the R-store, my fingernails painted black. But if you don't let me go, I will be your death. 
+It's not personal. You did wake me up. And you are beautiful, sitting there in your white coat, with your slicked-back hair and Biaritz tan and expensive watch and a faint smell of pine in your aftershave. 
 
-You look a little frightened, and you should. 
+No, I don't want a glass of water. But I need you to listen. 
 
-I was my mother's death: she wanted a daughter made from snow and blood and a raven's wing, and there is only one place where such a wish leads. She wanted a daughter who was *just so*, perfect skin and hair and lips. 
+I was my mother’s death. She wanted a perfect daughter, one made from snow and blood and a raven’s wing, and there is only one place where such a wish leads. 
 
-My father wanted me to be her image when she was gone, and when I couldn't, he started dying, slowly. 
-[FIXME more about this?]
+My stepmother saw it: a reflection of her own end, the death of youth and beauty. She knew what I was, even when I was a child: her death in the mirror. 
 
-No, I don't want a glass of water. But I need to borrow your phone. I'll just send a message while we talk. 
+I read comics about Bamse the World’s Strongest Bear and pretended to be his friend Kilpinen the turtle. When I pulled my head inside my shirt, to hide from the world as if inside a shell, she pulled me back out by my hair and warned me about suffocating. But she always sounded wistful. 
 
-To my stepmother, I was a reflection of her death, the end of youth and beauty. She knew it, always. Even when I was a little girl, reading comics about Bamse the World's Strongest Bear and wanted to ride his horse, pretended to be his friend Kilpinen the turtle and pulled my head inside my shirt. I cut paper, made snowflakes and attached them to our windows; they left bluetack marks when she took them away, like little fingerprints. 
+I could see the slow death I brought to my father, as I grew older. I was a hole in him, shaped like my mother, and through me, his life leaked away. And so I tried to run away. 
 
-I will be the death of the man with the camera: he did not do as he was told, and in time, he will pay. 
+I will be the death of the man with the camera my stepmother sent after me: he saw something else in my face, did not do as he was told, and in time, she will make him pay. 
 
-The little men thought they saved me, but they just saw wat they wanted, too: a mother in a tight T-shirt and pert boobs. A Weird Science girl. If I had stayed, I would have been the death of their friendship, the thing one of them had to have all to himself. 
+My friends thought they saved me, but in time, I would have been the death of their friendship. They shared everything: but I was the thing one of them would have claimed all to himself. 
 
-In a way, it was a blessing when she sent the message. I knew it was her, the instant my phone vibrated in my pocket. I could feel it in its warm rounded curves and sleek glass. I tried not to read it, but how could I not? 
+In a way, it was a blessing when she sent the message. I knew it was her, the instant my phone vibrated in my pocket. I could feel it in its warm rounded curves and sleek glass. 
 
-It was poison. The letters spelled out a toxin, like a long chemical formula. IT'S YOUR FAULT HE DIED, it said. A link to a news page: the car crash. If I had not run away, it would not have happened. In the end, I was my father's death, too. 
+The letters spelled poison, a chemical formula made of words. IT'S YOUR FAULT HE DIED. There was a link to the car crash. 
 
 I stared at it until my eyes hurt. 
 
-I found the TKs in Jyri's room. I swallowed them without water. It was better to be nothing than a reflection, silence rather than an echo. 
+I found the drugs in Jyri's room. I swallowed them without water: they were dry and tasted like nothing. It was better to be nothing than death, better to be a silence than an echo. 
 
 It hurt a bit at first, in my belly and between my temples. Then the dreams came like rain. 
-
-I can see it in your eyes, too. Looking for something you desperately want to see. You think you have won me, rescued me, woken me from a sleep like death. But you have to understand: they will take me away from you, once they find out I am alive. I will be a princess, back from the dead. It will be the only headline, in blue and yellow and red. 
 
 I was a vampire princess, cold and hard, who made a pact with the old forces of the earth, ancient gods who took the shape of little men, and fought with a dark queen who wanted an immortal's blood. 
 
 I was an android girl, a pleasure machine without a heart, sold off and sent to the scrapyard by a jealous wife; taken in by mining bots on distant Mars and deactivated by a secret code, only to wake again in the distant future where the sun burned red, by a posthuman god looking to understand humanity. 
 
-I was a hundred other princesses who existed only to die and come back again and to reflect others' hopes and dreams, and it took me all this time to dream a way out of the mirror. Sometimes you have to dream to wake up. 
+I was a hundred other princesses who existed only to die and come back again and to reflect others' hopes and dreams. 
 
-You don't believe me. You think we will fall in love and marry. My stepmother will come to our wedding and stare at our happiness, face red with rage, spiky heels tapping impotently on the dance floor. Can you hear it? Tap-tap-tap. Tap-tap-tap. 
+I can see it in your eyes, too. Looking for something you desperately want to see. You think you have won me, rescued me. 
 
-You have to excuse me for a little joke. That's only my friend Jyri at the door. 
+You don't believe me. You think we will fall in love and marry. My stepmother will come to our wedding and stare at our happiness, face red with rage, spiky heels tapping impotently on the dance floor. But she won’t let me have you. She will ask you to dance, and as the music swells, there will be a syringe in her hand. 
 
-Jyri, say hi. No, don't cry. It's me, and I missed you too. 
-
-Now, did you bring it? 
-
-Yes, it's perfect. I knew I could count on you. Please tell the others thank you, and that I am sorry. Goodbye. 
-
-[FIXME perhaps it's just a parcel -- this is a bit awkward here.]
+That’s how it always goes in dreams. But I also dreamt a way out of the mirror. 
 
 You said I died, for a little bit, when you brought me back. That's the way it has to be. Lumi never woke up and died in her sleep. If you love me, you can do that for me, change the records and find some nameless body who can be Lumi instead of me. 
 
-Thank you. You deserve a real kiss for that, and more. 
+I will kiss you now, for goodbye. 
 
-Come closer. 
+My body is broken. My teeth hurt, my hair is in tatters. My limbs are withered and full of sores. It does not matter. You want me. You untangle the electrodes from my hair while kissing my neck. On the screen of your laptop, the apple is red. And then you are my little death, and I am yours. 
 
-My body is broken. My teeth hurt, my hair is in tatters, my limbs skinny and full of sores, but it does not matter. You untangle the electrodes from my hair while kissing my neck. On the screen of your laptop, the apple is red. And then you are my little death, and I am yours. 
+You are still asleep when I wrap the hospital gown around me and send a message to my friends from your phone. They will have a passport and a ticket waiting for me, and a new name, forged from the silver of bits.  
 
-You are still asleep when I wrap the hospital gown around me, take the passport that Jyri brought. I whisper a goodbye to you and leave. 
+I whisper a goodbye to you and leave. 
 
-It has snowed during the night, light spring snow, soft and wet. The birdsong in the trees is made soft by the blanket on the ground. All the world is white, like blank paper, a beginning. 
+It has snowed during the night. The birdsong in the trees is made soft by the blanket on the ground. And all the world is white and empty, like the first page of a book. 

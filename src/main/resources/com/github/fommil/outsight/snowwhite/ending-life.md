@@ -1,40 +1,44 @@
+I am everything you could ever want. I am everything that you can’t buy, you who sit there in your white coat, with your slicked-back hair and Biaritz tan and expensive watch and a faint smell of pine in your aftershave. 
 
-I am everything you could ever want. 
+I am life. I am innocence. I am fragile. I am sweet. I am the thing you made, from chemicals and electric dreams. 
 
-I am life, and we are meant to be together. 
+So just for you, I make myself look weaker than I am, after my waking, so you can rush to my side and adjust the pillows and offer me a glass of water. I let your hand touch mine as I take it and drink, slowly. Your fingers are warm, your breath eager and quick. My lips are dry and ragged, my hair a tangled mess. It doesn't matter. The magic is still there. 
 
-Just for you, I make myself look weaker than I am, so you can rush to my side and adjust the pillows and offer me a glass of water. I let your hand touch mine as I take it and drink, slowly. My lips are dry and ragged, my hair a tangled mess, but it doesn't matter, the magic is still there. You see what you want to see. 
+This is the game of the mirror. I make you see what you want to see. 
 
-You gave me life. And now we are going to play the game of the mirror. 
+It was my father the king who showed me how to play. He told me I was special, that I was not like the other little girls. My mother brought me from the fairy kingdom with a wish, made me from snow and blood and a raven’s wing. 
 
-It was my father who showed me how to play. How I could make him do what I wanted when I smiled and showed him the face she wanted to see. I was his special child, her princess, an afterlife for my mother, a life she had made from snow and blood and a raven's wing. 
+If I showed him my mother’s face, he would do anything I wanted. If I smiled just so, he would smile and buy me a Princess Barbie. If I chewed on my hair just right, his face would darken, and he would go to his office to sit still, covering his eyes with his hands.  
 
-Then *she* came, and she recognised me for what I was. Someone like her, only younger and smarter. 
+All that was his would have been mine. Until she came, to fill the hole my mother had left, to stop my father’s life from leaking out. And she knew me for what I was, a thing just like her. The mirror game between us was an infinite corridor of reflections, a labyrinth of glass and smiles. 
 
-She took my father's life, and for that I was almost grateful: he had become withdrawn, his life running to the ground slowly, leaking from the hole my mother had left. But we could not play the mirror game together, without creating an infinite corridor, a glass labyrinth that would swallow us both. 
+She was older and stronger, the bitch. And so I had to run. 
 
-She was older and stronger. I had no choice but to run and hide, but she chased me. The photographer was easy: the square frame only contains what they put in it. All it took to send him away was a self-inflicted bruise and a sad look. 
+She chased me, of course. The photographer was easy: his kind exist to see things in a square frame, through a lens. All it took to send him away was a self-inflicted bruise, a mournful look, to show him what he had lost. 
 
-As I hid with the little men -- so trusting, so innocent -- she sent me a message, saying that she wanted me to come home. I knew it was a trap, and realised that I would never escape unless she thought she had won. 
+The boys in black would have built me a castle as long as I showed them a sexy little mother. It would have been a safe haven to build myself again, to grow strong. But she sent me a message, summoning me home, masked in grief and love and other lies. 
 
-So I took my medicine. I got the dose wrong: it almost killed me, trapped me in other lives,
+I knew it was a trap. I could never escape her. Unless she thought she had won. 
 
-I was a vampire princess, cold and hard, who made a pact with the old forces of the earth, ancient gods who took the shape of little men, and fought with a dark queen who wanted an immortal's blood. 
+So I took my medicine. I would sleep until the time was right to wake. 
 
-I was an android girl, a pleasure machine without a heart, sold off and sent to the scrapyard by a jealous wife; taken in by mining bots on distant Mars and deactivated by a secret code, only to wake again in the distant future where the sun burned red, by an alien god looking to understand humanity long gone. 
+I slept and dreamed my revenge. 
 
-I was a child princess who charmed animals and men with her song. 
+I was a vampire princess, cold and hard, who made a pact with the old forces of the earth, ancient gods who took the shape of little men, and fought with a dark queen who wanted an immortal's blood. In the end, the queen drank too deep of undeath and burned in the sun. 
 
-You brought me back, and I am not ungrateful. Before it's time for me to take all that you have, I will make your dreams come true. 
+I was an android girl, a pleasure machine without a heart, sold off and sent to the scrapyard by a jealous AI; taken in by mining bots on distant Mars and deactivated by a secret code, only to wake again in the distant future where the sun burned red, by an alien god looking to understand humanity long gone. As a punishment, the AI was trapped in a singularity and turned on itself, devouring its own code as entropy burned it away. 
 
-You will nurse me back to health. We will be on the pages of all the papers, a miracle couple, our names in red and yellow and blue. I will be shy at first, and fragile, and broken; you will put me together piece by piece, kiss by kiss. I will visit the little men and thank them. 
+You woke me. I am not ungrateful. Before I take all that you have, I will make your dreams come true, as a true love should. 
 
-We will get married in your family's country house, in the summer, beneath white flowers in the trees and birdsong. 
+You will nurse me back to health. We will be on the pages of all the papers, a miracle couple, the princess and her saviour. I will be shy at first, and broken; you will put me together piece by piece, kiss by kiss. 
+
+We will get married in your family's country house, in midsummer, beneath the white flowers of bird cherry trees. 
 
 My stepmother will come. We will smile mirrored smiles at each other, and then you will offer her a dance. 
 
-And as the music rises and you swing her around, there will be a syringe in your hand. She will feel a little sting, like the peck of a bird. And then she will dance, dance in her high-heeled shoes, dance her life away. 
+And as the music rises and you swing her around, there will be a syringe in your hand. She will feel a little sting, like the peck of a bird. And then she will dance, dance in her high-heeled shoes until her feet burn, dance her life away. 
 
-Now, come here. Kiss me. Help me up: I want to see what it looks like outside. Oh yes. A blue sky, yellow light on walls of red brick. The black branches of trees against the white of snow. 
+Now, help me up. I want to see the sunrise outside. I want to see the face of the world again. 
 
-Distant birdsong, and then silence. 
+Oh yes. A blue sky, golden light, a red horizon. Black branches of trees against the white of snow, like writing. Birds, faintly singing, and then, silence. 
+
