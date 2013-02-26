@@ -4,8 +4,7 @@ import org.springframework.core.io.DefaultResourceLoader
 import io.{Codec, Source}
 
 
-case class Story(scenes: Set[Scene],
-                 extractors: Set[VariableExtractor],
+case class Story(extractors: Set[VariableExtractor],
                  transitions: TransitionCalculator)
 
 /** @param resource as a Spring resource string
