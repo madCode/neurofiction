@@ -4,7 +4,7 @@ import org.springframework.core.io.DefaultResourceLoader
 import io.{Codec, Source}
 
 
-case class Story(scenes: Map[String, Scene],
+case class Story(scenes: Set[Scene],
                  extractors: Set[VariableExtractor],
                  transitions: TransitionCalculator)
 
@@ -13,7 +13,7 @@ case class Story(scenes: Map[String, Scene],
   */
 case class Scene(resource: String) {
 
-  def content(): String = {
+  def raw = {
     val stream = new DefaultResourceLoader().getResource(resource).getInputStream
     try Source.fromInputStream(stream)(Codec.UTF8).mkString
     finally stream.close()
