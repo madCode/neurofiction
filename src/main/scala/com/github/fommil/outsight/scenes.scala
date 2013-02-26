@@ -18,7 +18,11 @@ case class Scene(resource: String) {
     try Source.fromInputStream(stream)(Codec.UTF8).mkString
     finally stream.close()
   }
+
+  def id = resource.split("/").last.replace(".md", "")
 }
+
+object Fin extends Scene("")
 
 
 trait Response
