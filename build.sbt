@@ -1,5 +1,4 @@
 // mkdir -p src/{main,test}/{java,scala,R}/com/github/fommil/outsight
-// NOTE: Maven is the primary build system, see https://github.com/sbt/sbt/issues/679
 
 /** Project */
 name := "outsight"
@@ -30,7 +29,8 @@ libraryDependencies <<= scalaVersion { scala_version =>
         "org.springframework"  %  "spring-core"         % "3.2.1.RELEASE" intransitive(),
         "com.typesafe"         %  "config"              % "1.0.0",
         "com.typesafe.akka"    %% "akka-contrib"        % "2.1.0",
-        "org.specs2"           %% "specs2"              % "1.13" % "test"
+        "org.specs2"           %% "specs2"              % "1.13" % "test",
+        "org.scalamock"        %% "scalamock-specs2-support" % "3.0.1" % "test"
     )
 }
 

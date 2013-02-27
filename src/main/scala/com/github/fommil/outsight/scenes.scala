@@ -4,8 +4,7 @@ import org.springframework.core.io.DefaultResourceLoader
 import io.{Codec, Source}
 
 
-case class Story(scenes: Map[String, Scene],
-                 extractors: Set[VariableExtractor],
+case class Story(extractors: Set[VariableExtractor],
                  transitions: TransitionCalculator)
 
 /** @param resource as a Spring resource string
@@ -13,12 +12,16 @@ case class Story(scenes: Map[String, Scene],
   */
 case class Scene(resource: String) {
 
-  def content(): String = {
+  def raw = {
     val stream = new DefaultResourceLoader().getResource(resource).getInputStream
     try Source.fromInputStream(stream)(Codec.UTF8).mkString
     finally stream.close()
   }
+
+  def id = resource.split("/").last.replace(".md", "")
 }
+
+object Fin extends Scene("")
 
 
 trait Response
