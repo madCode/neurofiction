@@ -7,9 +7,11 @@ trait TransitionCalculator {
 
 }
 
-class SnowWhiteTransitions extends TransitionCalculator {
+case class SnowWhiteRules() extends TransitionCalculator with EmotivHistRestriction {
 
-  private def scene(name: String) = Scene(s"classpath:com/github/fommil/outsight/snowwhite/$name.md}")
+  def scene(name: String) = Scene(s"classpath:com/github/fommil/outsight/snowwhite/$name.md")
+
+  def restriction = Set() + scene("life1") + scene("death1")
 
   def next(journey: Journey) =
     journey.scenes.reverse match {
