@@ -50,8 +50,7 @@ lowPassEmotivData <- function(eeg.data,Fny=64,Fc){
 }
 
 
-# Histograms 
-
+# Histograms ------------
 
 compareSensorHistograms <- function(eeg.data1,eeg.data2,sensor,xlimits=c(8000,9000)){
 	# Plots alpha-blended histograms of two EEG sensors. Note that this requires that data is loaded into a data frame in workspace. 
@@ -91,9 +90,6 @@ sensorHistogramComparisonGrid <- function(eeg.data1,eeg.data2,xlimits=c(8000,900
   
 }
 
-
-
-
 plotSensorHistograms <- function(eeg.data,xlimits=c(8500,9000)){
 	# Plot histograms for all the Emotiv sensors for the session. 
 	# Args: 
@@ -119,4 +115,51 @@ plotSensorHistograms <- function(eeg.data,xlimits=c(8500,9000)){
 	hist(o2,breaks=1000,xlim=xlimits)		
 		
 	detach(eeg.data)
+}
+
+
+# Spectral analysis ------------------
+
+plotSensorSpectrum <- function(eeg.data,sensor,Fs=128,smoothw=100){
+  # Plots the periodogram of a sensor from session. 
+  # Args:
+  #   eeg.data: a data frame from an emokit-java session. 
+  #   sensor: one of "af3","af4","f3","f4","f7","f8","fc5","fc6","o1","o2","p7","p8","t7","t8","gyrox","gyroy"
+  #   Fs: sampling frequency - defaults to 128 Hz. 
+  #   smoothw: smoothing window for the kernel method used by spec.prgram
+  data <- eeg.data[[sensor]]
+  
+  sensor.pr <- spec.pgram(data,span=c(smoothw,smoothw),xaxt="n",xlab="frequency (Hz)")
+  axis(side=1, at=(0:5)/10, labels = Fs*(0:5)/10)
+  
+}
+
+compareSensorPgrams <- function(eeg.data1,eeg.data2,sensor,Fs=128,smoothw=100){
+  # Contrasts the periodograms for two different sessions for a sensor. 
+  # Args: 
+  #   eeg.data1,eeg.data2: data frames storing emokit-java sessions. 
+  #   sensor: sensor: one of "af3","af4","f3","f4","f7","f8","fc5","fc6","o1","o2","p7","p8","t7","t8","gyrox","gyroy"
+  #   Fs: sampling frequency - defaults to 128 Hz. 
+  #   smoothw: smoothing window for the kernel method used by spec.prgram
+  
+  prgram1 <- spec.pgram(eeg.data1[[sensor]],plot=FALSE,span=c(smoothw,smoothw))
+  prgram2 <- spec.pgram(eeg.data2[[sensor]],plot=FALSE,span=c(smoothw,smoothw))
+  
+  plot(prgram1,col=rgb(0,0,1,1/4),xaxt="n",xlab="")
+  plot(prgram2,col=rgb(1,0,0,1/4),add=T,xaxt="n",xlab="frequency (Hz)")
+  axis(side=1, at=(0:5)/10, labels = Fs*(0:5)/10)
+  
+}
+
+pgramComparisonGrid <- function(eeg.data1,eeg.data2){
+  # Plots a grid of periodogram comparisons for every sensor. 
+  
+  sensors <- c("af3","af4","f3","f4","f7","f8","fc5","fc6","o1","o2","p7","p8","t7","t8","gyrox","gyroy")
+  par(mfrow=c(4,4))
+  
+  for (sensor1 in sensors){
+    compareSensorPgrams(eeg.data1,eeg.data2,sensor=sensor1)
+    
+  }
+  
 }
