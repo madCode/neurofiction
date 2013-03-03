@@ -1,6 +1,5 @@
 package com.github.fommil.outsight
 
-// TODO: ideally this would be a DSL reader, not a trait/implementation combo
 trait TransitionCalculator {
 
   def next(journey: Journey): Scene
@@ -24,10 +23,7 @@ case class SnowWhiteRules() extends TransitionCalculator with EmotivHistRestrict
         case "kiss" => scene("queen")
         case "queen" => scene("dwarfs") // [sic]
         case "dwarfs" => scene("hunter")
-        case "hunter" =>
-          // TODO: decide if snow white lives or dies
-          ???
-
+        case "hunter" => ??? // #5
         case "ending-death" => Fin
         case "ending-life" => Fin
         case _ => throw new IllegalArgumentException

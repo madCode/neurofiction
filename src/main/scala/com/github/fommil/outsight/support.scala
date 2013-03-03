@@ -23,7 +23,6 @@ trait MarkdownSupport {
 trait XmlSupport {
 
   def title = "An XHTML 1.1 document"
-  // TODO: CSS
 
   private lazy val header = s"""<?xml version="1.0" encoding="utf-8"?>
                             |<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML Basic 1.1//EN"
