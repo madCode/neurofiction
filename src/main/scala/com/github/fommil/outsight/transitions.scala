@@ -16,7 +16,7 @@ case class SnowWhiteRules() extends TransitionCalculator with EmotivHistRestrict
   def next(journey: Journey) =
     journey.scenes.reverse match {
       case Nil => scene("intro")
-      case last :: before => last._1.id match {
+      case last :: before => last._1.resource.split("/").last.replace(".md", "") match {
         case "intro" => scene("dreaming-princess")
         case "dreaming-princess" => scene("life1")
         case "life1" => scene("death1")
