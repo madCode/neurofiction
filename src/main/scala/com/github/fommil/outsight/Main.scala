@@ -13,6 +13,7 @@ object Main extends App {
 
   val panel = new XHTMLPanel()
   panel.setDocument(document)
+
   val scroll = new FSScrollPane(panel)
   val frame = new JFrame("Insight / Outsight")
   frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)

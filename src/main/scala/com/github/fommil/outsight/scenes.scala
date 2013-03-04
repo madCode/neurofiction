@@ -10,9 +10,13 @@ case class Story(extractors: Set[VariableExtractor],
   */
 case class Scene(resource: String) extends ResourceSupport with MarkdownSupport with XmlSupport {
 
-  private lazy val html = markdown(loadResource(resource))
+  override lazy val css = "body {background-color: yellow; font-size: 200%;}"
+//  override lazy val css = loadResource("https://raw.github.com/sillyleo/FT-Writer/master/User.fttheme/style.css")
 
-  def xml: Document = htmlToXml(html)
+  private lazy val markup = markdown(loadResource(resource))
+
+  def xml: Document = htmlToXml(markup)
+
 
 }
 
