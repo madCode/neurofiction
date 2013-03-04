@@ -10,9 +10,11 @@ case class Story(extractors: Set[VariableExtractor],
   */
 case class Scene(resource: String) extends ResourceSupport with MarkdownSupport with XmlSupport {
 
-  private lazy val html = markdown(loadResource(resource))
+  override lazy val css = loadResource(resource.replaceAll("/[^/]+?$", "/style.css"))
 
-  def xml: Document = htmlToXml(html)
+  private lazy val markup = markdown(loadResource(resource))
+
+  def xml: Document = htmlToXml(markup)
 
 }
 
