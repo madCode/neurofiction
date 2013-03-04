@@ -13,7 +13,7 @@ listEmotivSessions <- function(database.name="zoku"){
   # Lists the Emotiv EPOC sessions recorded with emokit-java stored in the PostgreSQL database database.name.
   # Args: 
   # database.name: The PostgreSQL database name where the data is stored. 
-  # Returns: a vector of session names. 
+  # Returns: a vector of session names.
   
   
   # Load database libraries. 
@@ -222,7 +222,7 @@ plotAllSensors <- function(eeg.data){
   
 }
 
-plotSingleSensor <- function(eeg.data){
+plotSingleSensor <- function(eeg.data,sensor){
   # Create a plot of a single electrode, chosen from a list of all electrodes, with an adjustable slider for the time axis. Intended for visual exploration of one sensor. 
   # Args: 
   #   eeg.data: A data frame extractede from the emotiv-java PostgreSQL database using either loadEmotivInterval or loadEmotivSession functions.
