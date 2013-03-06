@@ -8,12 +8,15 @@
 
 # Filtering ---------------------------------------------------------------
 
-lowPassEmotivData <- function(eeg.data,Fny=64,Fc){
+# FIXME it does not feel like these functions work at all like they should... ? 
+
+lowPassEmotivData <- function(eeg.data,Fs=128,Fc,order=3){
   # Carry out low-pass filtering on EEG data using a fifth-order Butterworth filter. 
   # Args: 
   #   eeg.data: A data frame of emokit-java data from the default PostgreSQL database. 
   #   Fny: The Nyquist sampling frequency for the signal. The Emotiv sampling rate is 128Hz, so this defaults to 64. 
   #   Fc: The desired cutoff frequency. 
+  #   order: the order for the default Butterworth filter. 
   # Returns: A data frame where the low-pass filter has been applied to each factor (except timestamp and the gyro data.)
   # FIXME should have more filtering options. 
   
@@ -21,12 +24,13 @@ lowPassEmotivData <- function(eeg.data,Fny=64,Fc){
   require(signal)
   
   # Fc must be smaller than Fny. 
-  if (Fc>Fny){
+  if (Fc>Fs/2){
     stop("The cutoff frequency Fc must be smaller than the Nyquist frequency Fny.")
   }
   
   # Create a Butterworth filter. Note that the 'signal' package wants units in normalised frequencies. 
-  bf <- butter(5,Fc/Fny,type="low")
+  # 
+  bf <- butter(order,Fc/Fs)
   
   # Get the sensor names.   
   sensors.all <- colnames(eeg.data)
@@ -34,8 +38,6 @@ lowPassEmotivData <- function(eeg.data,Fny=64,Fc){
   sensors.ignore <- c("id","gyrox","gyroy","timestamp","session_id","battery")
   
   sensors <- setdiff(sensors.all,sensors.ignore)
-  # Create a data frame to hold the results. 
-  # message("Filtering sensors ",paste(sensors,sep=" "))
   
   # Initialise an empty data frame of appropriate size. 
   eeg.data.filtered <- eeg.data
@@ -46,6 +48,56 @@ lowPassEmotivData <- function(eeg.data,Fny=64,Fc){
   }
   
   return(eeg.data.filtered)
+  
+}
+
+
+highPassEmotivData <- function(eeg.data,Fs=64,Fc,order=5){
+  # Carry out high-pass filtering on EEG data using a fifth-order Butterworth filter. 
+  # Args: 
+  #   eeg.data: A data frame of emokit-java data from the default PostgreSQL database. 
+  #   Fny: The Nyquist sampling frequency for the signal. The Emotiv sampling rate is 128Hz, so this defaults to 64. 
+  #   Fc: The desired cutoff frequency. 
+  #   order: the order for the default Butterworth filter. 
+  # Returns: A data frame where the low-pass filter has been applied to each factor (except timestamp and the gyro data.)
+  # FIXME should have more filtering options. 
+  
+  # Load the signal package. 
+  require(signal)
+  
+  # Fc must be smaller than Fny. 
+  if (Fc>Fny){
+    stop("The cutoff frequency Fc must be smaller than the Nyquist frequency Fny.")
+  }
+  
+  # Create a Butterworth filter. Note that the 'signal' package wants units in normalised frequencies. 
+  # 
+  bf <- butter(order,Fc/Fny,type="high")
+  
+  # Get the sensor names.   
+  sensors.all <- colnames(eeg.data)
+  # Ignore some of the sensors. 
+  sensors.ignore <- c("id","gyrox","gyroy","timestamp","session_id","battery")
+  
+  sensors <- setdiff(sensors.all,sensors.ignore)
+  
+  # Initialise an empty data frame of appropriate size. 
+  eeg.data.filtered <- eeg.data
+  
+  # Now apply filters to the sensors. 
+  for (sensor in sensors){
+    eeg.data.filtered[[sensor]] <- filter(bf,eeg.data[[sensor]])    
+  }
+  
+  return(eeg.data.filtered)
+  
+  
+  
+  
+  
+  
+  
+  
   
 }
 
@@ -74,7 +126,7 @@ plot(histo.2,col=rgb(1,0,0,1/4),add=T,border=rgb(0,0,0,0),xlab="",freq=FALSE)
 		
 }
 
-sensorHistogramComparisonGrid <- function(eeg.data1,eeg.data2,xlimits=c(8000,9000)){
+histogramComparisonGrid <- function(eeg.data1,eeg.data2,xlimits=c(8000,9000)){
   # Plots a grid of alpha-shaded histograms for two different EEG datasets for each sensor. 
   
   sensors <- c("af3","af4","f3","f4","f7","f8","fc5","fc6","o1","o2","p7","p8","t7","t8","gyrox","gyroy")
@@ -151,14 +203,15 @@ compareSensorPgrams <- function(eeg.data1,eeg.data2,sensor,Fs=128,smoothw=100){
   
 }
 
-pgramComparisonGrid <- function(eeg.data1,eeg.data2){
+pgramComparisonGrid <- function(eeg.data1,eeg.data2,sw=100){
   # Plots a grid of periodogram comparisons for every sensor. 
+  # FIXME: plot labels should include sensors and overwrite the spec.pgram labels. 
   
   sensors <- c("af3","af4","f3","f4","f7","f8","fc5","fc6","o1","o2","p7","p8","t7","t8","gyrox","gyroy")
   par(mfrow=c(4,4))
   
   for (sensor1 in sensors){
-    compareSensorPgrams(eeg.data1,eeg.data2,sensor=sensor1)
+    compareSensorPgrams(eeg.data1,eeg.data2,sensor=sensor1,smoothw=sw)
     
   }
   
