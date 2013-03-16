@@ -2,7 +2,7 @@ package com.github.fommil.outsight
 
 import org.xhtmlrenderer.simple.{FSScrollPane, XHTMLPanel}
 import javax.swing._
-import java.awt.BorderLayout
+import java.awt.{Point, BorderLayout}
 import java.awt.event._
 import akka.contrib.jul.JavaLogging
 import javax.swing.event.{ChangeEvent, ChangeListener}
@@ -72,6 +72,7 @@ class StoryView(story: Story, callback: (Journey, Scene) => Unit) extends JFrame
     this.journey = journey
     this.scene = story.transitions.next(journey)
     xhtml.setDocument(scene.xml)
+    scroll.getViewport.setViewPosition(new Point)
   }
 
   update(Journey(Nil, Nil))
