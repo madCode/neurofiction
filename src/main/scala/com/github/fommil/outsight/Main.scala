@@ -3,8 +3,9 @@ package com.github.fommil.outsight
 import org.xhtmlrenderer.simple.{FSScrollPane, XHTMLPanel}
 import javax.swing.{ScrollPaneConstants, JFrame}
 import java.awt.GraphicsEnvironment
+import akka.contrib.jul.JavaLogging
 
-object Main extends App {
+object Main extends App with JavaLogging {
 
   val rules = SnowWhiteRules()
   val story = Story(Set(EmotivHistExtractor(rules)), rules)
@@ -13,8 +14,6 @@ object Main extends App {
   val document = story.transitions.next(journey).xml
 
   val panel = new XHTMLPanel()
-  panel.getSharedContext.getTextRenderer.setFontScale(3)
-  panel.getSharedContext.getTextRenderer.setSmoothingThreshold(0)
   panel.setDocument(document)
 
   val scroll = new FSScrollPane(panel)
@@ -28,7 +27,6 @@ object Main extends App {
   val dev = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice()
   dev.setFullScreenWindow(frame)
   frame.setVisible(true)
-
 
   //  val emotiv = new Emotiv()
   //  import scala.collection.JavaConversions._
