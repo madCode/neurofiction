@@ -1,31 +1,28 @@
 package com.github.fommil.outsight
 
-import org.xhtmlrenderer.simple.{FSScrollPane, XHTMLPanel}
-import javax.swing.JFrame
-import com.github.fommil.swing.SwingConvenience
+import java.awt.{Window, GraphicsEnvironment}
+import akka.contrib.jul.JavaLogging
 
-object Main extends App {
+object Main extends App with JavaLogging {
 
   val rules = SnowWhiteRules()
   val story = Story(Set(EmotivHistExtractor(rules)), rules)
-  val journey = Journey(Nil, Nil)
 
-  val document = story.transitions.next(journey).xml
+  val view = new StoryView(story, finished)
+  fullscreen(view)
 
-  val panel = new XHTMLPanel()
-  panel.getSharedContext.getTextRenderer.setFontScale(3)
-  panel.getSharedContext.getTextRenderer.setSmoothingThreshold(0)
-  panel.setDocument(document)
+  def finished(journey: Journey, scene: Scene) {
+    val latest = (scene, Set[Response]()) // dummy
+    view.update(journey.copy(scenes = journey.scenes :+ latest))
+  }
 
-  val scroll = new FSScrollPane(panel)
-  val frame = new JFrame("Insight / Outsight")
-  SwingConvenience.enableOSXFullscreen(frame)
-  frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)
-  frame.add(scroll)
-  frame.pack()
-  frame.setSize(1024, 768)
-  frame.setVisible(true)
-
+  @deprecated("move to fommil.common")
+  def fullscreen(window: Window) {
+    GraphicsEnvironment.getLocalGraphicsEnvironment.getDefaultScreenDevice.setFullScreenWindow(view)
+    // http://stackoverflow.com/questions/13064607
+    view.setVisible(false)
+    view.setVisible(true)
+  }
 
   //  val emotiv = new Emotiv()
   //  import scala.collection.JavaConversions._
@@ -36,6 +33,5 @@ object Main extends App {
   //    datum.setSession(session)
   //    log.info(datum.toString)
   //  }
-
 
 }

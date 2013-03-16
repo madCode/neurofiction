@@ -1,8 +1,2 @@
-body {font-family: Palatino;}
-h1, h2 {font-family: Century Gothic; color: #3C5084;}
-h3 {font-family: Century Gothic; color: #6076B4}
-code {font-family: Inconsolata;}
+body {font-family: Consolas; margin: 50px 200px; font-size: xx-large;}
 p {text-align:justify;}
-.hidden {display: none;}
-.newpage {page-break-before:always;}
-pre {padding: 10px; margin-left: 100px; margin-right: 100px; background: #EEEEEE;}
