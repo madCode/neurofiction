@@ -2,7 +2,7 @@ package com.github.fommil.outsight
 
 import org.xhtmlrenderer.simple.{FSScrollPane, XHTMLPanel}
 import javax.swing.JFrame
-import uk.me.fommil.swing.SwingConvenience
+import com.github.fommil.swing.SwingConvenience
 
 object Main extends App {
 
