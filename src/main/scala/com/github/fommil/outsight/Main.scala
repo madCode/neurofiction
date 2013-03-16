@@ -1,8 +1,8 @@
 package com.github.fommil.outsight
 
 import org.xhtmlrenderer.simple.{FSScrollPane, XHTMLPanel}
-import javax.swing.JFrame
-import com.github.fommil.swing.SwingConvenience
+import javax.swing.{ScrollPaneConstants, JFrame}
+import java.awt.GraphicsEnvironment
 
 object Main extends App {
 
@@ -18,12 +18,15 @@ object Main extends App {
   panel.setDocument(document)
 
   val scroll = new FSScrollPane(panel)
+  scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED)
   val frame = new JFrame("Insight / Outsight")
-  SwingConvenience.enableOSXFullscreen(frame)
   frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)
+  frame.setUndecorated(true)
   frame.add(scroll)
   frame.pack()
-  frame.setSize(1024, 768)
+
+  val dev = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice()
+  dev.setFullScreenWindow(frame)
   frame.setVisible(true)
 
 
