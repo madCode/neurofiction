@@ -1,7 +1,5 @@
 package com.github.fommil.outsight
 
-import org.xhtmlrenderer.simple.{FSScrollPane, XHTMLPanel}
-import javax.swing.{ScrollPaneConstants, JFrame}
 import java.awt.GraphicsEnvironment
 import akka.contrib.jul.JavaLogging
 
@@ -11,22 +9,12 @@ object Main extends App with JavaLogging {
   val story = Story(Set(EmotivHistExtractor(rules)), rules)
   val journey = Journey(Nil, Nil)
 
-  val document = story.transitions.next(journey).xml
+  val scene = story.transitions.next(journey)
 
-  val panel = new XHTMLPanel()
-  panel.setDocument(document)
+  val view = new StoryView
+  GraphicsEnvironment.getLocalGraphicsEnvironment.getDefaultScreenDevice.setFullScreenWindow(view)
 
-  val scroll = new FSScrollPane(panel)
-  scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED)
-  val frame = new JFrame("Insight / Outsight")
-  frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)
-  frame.setUndecorated(true)
-  frame.add(scroll)
-  frame.pack()
-
-  val dev = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice()
-  dev.setFullScreenWindow(frame)
-  frame.setVisible(true)
+  view.setScene(scene)
 
   //  val emotiv = new Emotiv()
   //  import scala.collection.JavaConversions._
