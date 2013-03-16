@@ -7,18 +7,14 @@ object Main extends App with JavaLogging {
 
   val rules = SnowWhiteRules()
   val story = Story(Set(EmotivHistExtractor(rules)), rules)
-  var journey = Journey(Nil, Nil)
 
-  val view = new StoryView
-  view.callback = {scene: Scene =>
-    val latest = (scene, Set[Response]())
-    journey = journey.copy(scenes = journey.scenes ::: latest :: Nil)
-    val next = story.transitions.next(journey)
-    view.update(next)
-  }
-  view.update(story.transitions.next(journey))
+  val view = new StoryView(story, finished)
   GraphicsEnvironment.getLocalGraphicsEnvironment.getDefaultScreenDevice.setFullScreenWindow(view)
 
+  def finished(journey: Journey, scene: Scene) {
+    val latest = (scene, Set[Response]()) // dummy
+    view.update(journey.copy(scenes = journey.scenes :+ latest))
+  }
 
   //  val emotiv = new Emotiv()
   //  import scala.collection.JavaConversions._
@@ -29,6 +25,5 @@ object Main extends App with JavaLogging {
   //    datum.setSession(session)
   //    log.info(datum.toString)
   //  }
-
 
 }

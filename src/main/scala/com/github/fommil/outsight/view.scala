@@ -8,7 +8,10 @@ import akka.contrib.jul.JavaLogging
 import javax.swing.event.{ChangeEvent, ChangeListener}
 
 // callback is called when the user requests the next scene
-class StoryView extends JFrame("Insight / Outsight") with JavaLogging {
+class StoryView(story: Story, callback: (Journey, Scene) => Unit) extends JFrame("Insight / Outsight") with JavaLogging {
+
+  private var journey: Journey = null
+  private var scene: Scene = null
 
   setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)
   setLayout(new BorderLayout)
@@ -25,13 +28,12 @@ class StoryView extends JFrame("Insight / Outsight") with JavaLogging {
   private val nextButton = new JButton("Next")
   nextButton.setSize(150, 150)
   nextButton.setFocusable(false)
+  nextButton.setVisible(false)
   layers.add(nextButton, new Integer(1))
-
-  var callback: Scene => Unit = scene => ()
 
   nextButton.addActionListener(new ActionListener{
     def actionPerformed(e: ActionEvent) {
-      callback(scene)
+      callback(journey, scene)
     }
   })
 
@@ -54,11 +56,12 @@ class StoryView extends JFrame("Insight / Outsight") with JavaLogging {
     }
   })
 
-  var scene: Scene = null
-
-  def update(scene: Scene) {
-    this.scene = scene
+  def update(journey: Journey) {
+    this.journey = journey
+    this.scene = story.transitions.next(journey)
     panel.setDocument(scene.xml)
   }
+
+  update(Journey(Nil, Nil))
 
 }
