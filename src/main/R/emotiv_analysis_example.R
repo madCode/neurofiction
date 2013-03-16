@@ -10,6 +10,9 @@ listEmotivSessions()
 sam.bored <- loadEmotivSession("Sam - Zelazny 2")
 sam.interested <- loadEmotivSession("Sam - Wilde Happy PRince")
 
+# TODO data cleanup
+
+
 # Compare voltage histograms. 
 histogramComparisonGrid(sam.bored, sam.interested)
 
@@ -18,8 +21,8 @@ histogramComparisonGrid(sam.bored, sam.interested)
 pgramComparisonGrid(sam.bored,sam.interested)
 
 # Do some filtering - cut-off 30Hz
-sam.bored.low <- lowPassEmotivData(sam.bored,Fc=30,order=3)
-sam.interested.low <- lowPassEmotivData(sam.bored,Fc=30,order=3)
+sam.bored.low <- lowPassEmotivData(sam.bored,Fc=50,order=3)
+sam.interested.low <- lowPassEmotivData(sam.bored,Fc=50,order=3)
 
 
 histogramComparisonGrid(sam.bored.low,sam.interested.low)
