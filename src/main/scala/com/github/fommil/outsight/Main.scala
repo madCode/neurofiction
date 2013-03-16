@@ -1,29 +1,40 @@
 package com.github.fommil.outsight
 
 import akka.contrib.jul.JavaLogging
-import com.github.fommil.swing.SwingConvenience
+import com.github.fommil.swing.SwingConvenience.fullscreen
+import com.github.fommil.emokit.Emotiv
+import com.github.fommil.emokit.jpa.{EmotivDistributor, EmotivJpaController, EmotivSession}
+import scala.collection.JavaConversions._
+import com.github.fommil.jpa.CrudDao
 
 object Main extends App with JavaLogging {
+
+  val emf = CrudDao.createEntityManagerFactory("OutsightPU")
+
+  val emotiv = new Emotiv
+  val distributor = new EmotivDistributor(emotiv)
+  val db = new EmotivJpaController(emf)
+  db.setSession(new EmotivSession)
+  db.setRecording(true)
+  distributor.addPacketListener(db)
+  distributor.start()
 
   val rules = SnowWhiteRules()
   val story = Story(Set(EmotivHistExtractor(rules)), rules)
 
-  val view = new StoryView(story, finished)
-  SwingConvenience.fullscreen(view)
+  val view = new StoryView(story, cut)
+  fullscreen(view)
 
-  def finished(journey: Journey, scene: Scene) {
-    val latest = (scene, Set[Response]()) // dummy
+  def cut(journey: Journey, scene: Scene) {
+    val session = db.getSession
+    session.setName(scene.toString)
+    session.setNotes(journey.toString)
+    db.updateSession(session)
+
+    val response = EmotivResponse(session)
+    val latest = (scene, Set[Response]() + response)
+    db.setSession(new EmotivSession)
     view.update(journey.copy(scenes = journey.scenes :+ latest))
   }
-
-  //  val emotiv = new Emotiv()
-  //  import scala.collection.JavaConversions._
-  //  val session = new EmotivSession()
-  //  session.setName("My Session")
-  //  for (packet <- emotiv) {
-  //    val datum = EmotivDatum.fromPacket(packet)
-  //    datum.setSession(session)
-  //    log.info(datum.toString)
-  //  }
 
 }
