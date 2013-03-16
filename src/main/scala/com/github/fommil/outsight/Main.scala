@@ -1,41 +1,40 @@
 package com.github.fommil.outsight
 
-import org.xhtmlrenderer.simple.{FSScrollPane, XHTMLPanel}
-import javax.swing.JFrame
-import com.github.fommil.swing.SwingConvenience
+import akka.contrib.jul.JavaLogging
+import com.github.fommil.swing.SwingConvenience.fullscreen
+import com.github.fommil.emokit.Emotiv
+import com.github.fommil.emokit.jpa.{EmotivDistributor, EmotivJpaController, EmotivSession}
+import scala.collection.JavaConversions._
+import com.github.fommil.jpa.CrudDao
 
-object Main extends App {
+object Main extends App with JavaLogging {
+
+  val emf = CrudDao.createEntityManagerFactory("OutsightPU")
+
+  val emotiv = new Emotiv
+  val distributor = new EmotivDistributor(emotiv)
+  val db = new EmotivJpaController(emf)
+  db.setSession(new EmotivSession)
+  db.setRecording(true)
+  distributor.addPacketListener(db)
+  distributor.start()
 
   val rules = SnowWhiteRules()
   val story = Story(Set(EmotivHistExtractor(rules)), rules)
-  val journey = Journey(Nil, Nil)
 
-  val document = story.transitions.next(journey).xml
+  val view = new StoryView(story, cut)
+  fullscreen(view)
 
-  val panel = new XHTMLPanel()
-  panel.getSharedContext.getTextRenderer.setFontScale(3)
-  panel.getSharedContext.getTextRenderer.setSmoothingThreshold(0)
-  panel.setDocument(document)
+  def cut(journey: Journey, scene: Scene) {
+    val session = db.getSession
+    session.setName(scene.toString)
+    session.setNotes(journey.toString)
+    db.updateSession(session)
 
-  val scroll = new FSScrollPane(panel)
-  val frame = new JFrame("Insight / Outsight")
-  SwingConvenience.enableOSXFullscreen(frame)
-  frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)
-  frame.add(scroll)
-  frame.pack()
-  frame.setSize(1024, 768)
-  frame.setVisible(true)
-
-
-  //  val emotiv = new Emotiv()
-  //  import scala.collection.JavaConversions._
-  //  val session = new EmotivSession()
-  //  session.setName("My Session")
-  //  for (packet <- emotiv) {
-  //    val datum = EmotivDatum.fromPacket(packet)
-  //    datum.setSession(session)
-  //    log.info(datum.toString)
-  //  }
-
+    val response = EmotivResponse(session)
+    val latest = (scene, Set[Response]() + response)
+    db.setSession(new EmotivSession)
+    view.update(journey.copy(scenes = journey.scenes :+ latest))
+  }
 
 }

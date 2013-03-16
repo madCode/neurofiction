@@ -18,10 +18,11 @@ resolvers ++= Seq(
 
 libraryDependencies <<= scalaVersion { scala_version => 
     Seq(
-        "com.github.fommil"    %  "java-logging"             % "1.0-SNAPSHOT",
+        "com.github.fommil"    %  "java-logging"             % "1.0",
         // "com.github.fommil" %  "scala-java-logging"       % "1.0-SNAPSHOT",
         "com.github.fommil"    %  "common-utils"             % "1.0-SNAPSHOT",
         "com.github.fommil"    %  "emokit"                   % "1.0-SNAPSHOT",
+        "com.github.fommil"    %  "common-utils"             % "1.0-SNAPSHOT",
         "org.springframework"  %  "spring-core"              % "3.2.1.RELEASE" intransitive(),
         "com.typesafe"         %  "config"                   % "1.0.0",
         "org.pegdown"          %  "pegdown"                  % "1.2.1",
