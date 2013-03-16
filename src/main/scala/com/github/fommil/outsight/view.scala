@@ -3,7 +3,7 @@ package com.github.fommil.outsight
 import org.xhtmlrenderer.simple.{FSScrollPane, XHTMLPanel}
 import javax.swing._
 import java.awt.BorderLayout
-import java.awt.event.{ActionEvent, ActionListener, ComponentEvent, ComponentAdapter}
+import java.awt.event._
 import akka.contrib.jul.JavaLogging
 import javax.swing.event.{ChangeEvent, ChangeListener}
 
@@ -18,20 +18,25 @@ class StoryView(story: Story, callback: (Journey, Scene) => Unit) extends JFrame
   private val layers = new JLayeredPane
   add(layers, BorderLayout.CENTER)
 
-  private val panel = new XHTMLPanel
-  private val scroll = new FSScrollPane(panel)
+  private val xhtml = new XHTMLPanel
+  private val scroll = new FSScrollPane(xhtml)
   scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED)
-  // use of Integer not a typo
-  // http://docs.oracle.com/javase/tutorial/uiswing/components/layeredpane.html
-  layers.add(scroll, new Integer(0))
+  xhtml.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+    KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0),
+    FSScrollPane.PAGE_DOWN
+  )
 
-  private val nextButton = new JButton("Next")
-  nextButton.setSize(150, 150)
-  nextButton.setFocusable(false)
-  nextButton.setVisible(false)
-  layers.add(nextButton, new Integer(1))
+  layers.add(scroll)
+  layers.setLayer(scroll, 0)
 
-  nextButton.addActionListener(new ActionListener{
+  private val next = new JButton("Next")
+  next.setSize(150, 150)
+  next.setFocusable(false)
+  next.setVisible(false)
+  layers.add(next)
+  layers.setLayer(next, 1)
+
+  next.addActionListener(new ActionListener {
     def actionPerformed(e: ActionEvent) {
       callback(journey, scene)
     }
@@ -41,9 +46,9 @@ class StoryView(story: Story, callback: (Journey, Scene) => Unit) extends JFrame
     override def componentResized(e: ComponentEvent) {
       val size = layers.getSize()
       scroll.setSize(size)
-      nextButton.setLocation(
-        size.width - nextButton.getWidth - scroll.getVerticalScrollBar.getWidth,
-        size.height - nextButton.getHeight
+      next.setLocation(
+        size.width - next.getWidth - scroll.getVerticalScrollBar.getWidth,
+        size.height - next.getHeight
       )
     }
   })
@@ -52,14 +57,21 @@ class StoryView(story: Story, callback: (Journey, Scene) => Unit) extends JFrame
     def stateChanged(e: ChangeEvent) {
       val view = scroll.getViewport
       val where = (view.getViewPosition.getY + view.getHeight)
-      nextButton.setVisible(where > 0.95 * panel.getSize().getHeight)
+      next.setVisible(where > 0.99 * xhtml.getSize().getHeight)
+    }
+  })
+
+  addKeyListener(new KeyAdapter {
+    override def keyPressed(e: KeyEvent) = e.getKeyChar match {
+      case ' ' if next.isVisible => next.doClick()
+      case _ =>
     }
   })
 
   def update(journey: Journey) {
     this.journey = journey
     this.scene = story.transitions.next(journey)
-    panel.setDocument(scene.xml)
+    xhtml.setDocument(scene.xml)
   }
 
   update(Journey(Nil, Nil))
