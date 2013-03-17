@@ -10,20 +10,77 @@ story <- data.frame(start="Dreaming Princess",training=c("Life","Death"),scenes=
 transition.death <- matrix(c(0.0,0.2,0.6,0.2,0.2,0.0,0.2,0.2,0.2,0.6,0.0,0.6,0.6,0.2,0.2,0.0),nrow=4,byrow=TRUE)
 transition.life <- matrix(c(0.0,0.6,0.2,0.6,0.6,0.0,0.6,0.2,0.2,0.2,0.0,0.2,0.2,0.2,0.2,0.0),nrow=4, byrow=TRUE)
 
+# Load some examples - nothing to do with Snow White, but just to show it works... 
+sam.frown <- loadEmotivSession("Sam Frowning")
+sam.zelazny <- loadEmotivSession("Sam - Zelazny")
+sam.interested <- loadEmotivSession("Sam - Wilde Happy PRince")
+sam.sw <- loadEmotivSession("Sam Snow White")
+sam.smile <- loadEmotivSession("Sam Smiling")
+sam.shorts <- loadEmotivSession("Sam - hitrecord shorts")
+
+eeg.test <- list(sam.smile,sam.frown,sam.zelazny,sam.shorts,sam.interested,sam.sw)
+
+
+test.sequence <- generateStorySequence(story,eeg.test,t.death=transition.death,t.life=transition.life)
 
 
 generateStorySequence <- function(story,eeg.sessions,t.death,t.life){
   # Generates a story sequence based on emotiv data sessions. 
   # Args: 
   #   story: a container for the story information. Here just a data frame. 
-  #   eeg.sessions: A list of EEG session data frames. The first two are "life" and "death" 
+  #   eeg.sessions: A list of EEG session data frames. The first two are "life" and "death". 
+  #   The rest should be in same order as the scene list. (Kiss, Dwarfs, Hunter, Queen)
   
+  # FIXME Lists can have names, so should use names for the scenes...! 
   scene.sequence <- list()
+  eeg.life <- eeg.sessions[[1]]
+  eeg.death <- eeg.sessions[[2]]
+  eeg.scenes <- eeg.sessions[3:length(eeg.sessions)]
   
-  scene.start  <- sample(story$scenes,size=1,prob=c(0.25,0.25,0.25,0.25))
-  story$visited[match(scene.start,story$scenes)] <- TRUE
   
+  # Start by sampling randomly. 
+  current  <- sample(story$scenes,size=1,prob=c(0.25,0.25,0.25,0.25))
+  story$visited[match(current,story$scenes)] <- TRUE
+  scene.sequence[[1]] <- current
   
+  show(current)
+  # Keep track of total life/death score. 
+  total.life <- emotivSessionDistance(eeg.life,eeg.scenes[[match(current,story$scenes)]])
+  total.death <- emotivSessionDistance(eeg.life,eeg.scenes[[match(current,story$scenes)]])
+  show(total.life)
+  show(total.death)
+  
+  # After the initial scene, generate 
+  for (i in 1:3){
+    scene.new <- nextScene(current,
+                          scenes=story$scenes,
+                         visited=story$visited,
+                         eeg.current=eeg.scenes[[match(current,story$scenes)]],
+                         eeg.life=eeg.life,eeg.death=eeg.death,t.death=t.death,t.life=t.life)  
+    current <- scene.new$nextscene
+    show(current)
+    # Update visited list. 
+    story$visited[match(current,story$scenes)] <- TRUE
+    show(story$visited)
+    # Update life / death score. 
+    total.life <- total.life + scene.new$life
+    total.death <- total.death <- scene.new$death
+  
+    scene.sequence[[i+1]] <- current
+  }
+  # Last remaining scene is... 
+  # scene.sequence[[4]] <- story$scenes[match(FALSE,story$visited)]
+  
+  # decide end scene
+  if (total.life < total.death){
+    scene.sequence[[5]] <- story$fin[1]
+  } else {
+    scene.sequence[[5]] <- story$fin[2]
+    
+  }
+  
+  return(scene.sequence)
+  # TODO possibly return other objects, too... 
 }
 
 nextScene <- function(current,scenes,visited,eeg.current,eeg.life,eeg.death,t.death,t.life){
@@ -64,14 +121,16 @@ updateTransitionMatrix <- function(visited,transition){
   for (s in visited){
     if (s == TRUE){
       # Make transition probability zero. 
-      transition[,i] <- 0
-      # Normalise rows. 
+      transition[i,] <- 0.0
+      # Normalise columns. 
       for (j in 1:4)
-      transition[j,] <- transition[j,]/sum(transition[j,])
+      transition[,j] <- transition[,j]/sum(transition[,j])
       
     }
     i<- i+1
   }
+  # FIXME remove this
+  show(transition)
   return(transition)
   
 }
