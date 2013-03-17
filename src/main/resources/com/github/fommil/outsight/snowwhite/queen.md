@@ -1,8 +1,8 @@
+# The Queen
+
 Today, she is going to kill her husband. 
 
 As she wakes up, the thought brings warm joy that spreads through her limbs like a massage. She stretches luxuriously in the empty bed: he is in an early morning meeting. The girl is gone, too. She feels her absence in the hushed silence of the house, and smiles.
-
-[FIXME How do we make her into something less of a cartoon villain? The third person actually accentuates this. Perhaps something about her past to make her more sympathetic?] 
 
 She walks through the house naked, glorying in the morning light on her flawless skin. In a few hours, it will all belong to her: the clean lines of the designer furniture, the calm of the frozen pier and the beach sauna, all the little symbols of power.  
 

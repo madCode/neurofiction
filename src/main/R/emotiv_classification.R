@@ -52,7 +52,7 @@ emotivSessionDistance <- function(eeg.data1,eeg.data2,method="histint"){
       d[i] <- emotivSensorDistance(eeg.data1,eeg.data2,sensor=s)
       i<- i+1 
     }
-  # To make similar images have smaller distance, return inverse. 
+  # To make similar sessions have smaller distance, return inverse. 
     return(1/norm_e(d))
   } else {
     stop("Please specify a valid distance measure.")

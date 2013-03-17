@@ -1,4 +1,3 @@
-[FIXME Probably need more life/death images.]
 
 On the screen, flower grows, in speeded-up time: green tendrils push themselves up, slowly at first, swaying to the tempo of the flickering sky and the shadows of clouds flashing past, then bifurcating into a labyrinth of emerald forking paths and leaves like tongues, finally ending in a fiery explosion of petals and yellow stamen. 
 

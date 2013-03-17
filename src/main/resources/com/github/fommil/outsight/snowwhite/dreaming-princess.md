@@ -1,3 +1,4 @@
+
 The princess sleeps in the hospital bed, and the young doctor watches her dreams. 
 
 She is the faded image of a beautiful girl: pale sunken cheeks, tangled black hair, lips with the faintest hint of red. The electroencephalography cap makes her head into a forest of wires and electrodes. She looks gaunt and old. Her skin is paper-thin, full of wounds and bedsores. Her teeth are marred by caries. 

@@ -19,6 +19,7 @@ generateStorySequence <- function(story,eeg.sessions,t.death,t.life){
   
   # Start by sampling randomly. 
   current  <- sample(story$scenes,size=1,prob=c(0.25,0.25,0.25,0.25))
+  # match here gets the index of the current scene from the scene list. 
   story$visited[match(current,story$scenes)] <- TRUE
   scene.sequence[[1]] <- current
   
@@ -29,7 +30,7 @@ generateStorySequence <- function(story,eeg.sessions,t.death,t.life){
   # show(total.life)
   # show(total.death)
   
-  # After the initial scene, generate 
+  # After the initial scene, generate the rest. 
   for (i in 1:3){
     scene.new <- nextScene(current,
                            scenes=story$scenes,
@@ -40,7 +41,7 @@ generateStorySequence <- function(story,eeg.sessions,t.death,t.life){
     #    show(current)
     # Update visited list. 
     story$visited[match(current,story$scenes)] <- TRUE
-    show(story$visited)
+    # show(story$visited)
     # Update life / death score. 
     total.life <- total.life + scene.new$life
     total.death <- total.death <- scene.new$death

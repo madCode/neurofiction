@@ -1,3 +1,5 @@
+# The Prince
+
 The doctor found her online. It was one of those links you click on when you are bored. A kind of digital shrine to a girl in a coma. There were pictures of her, and a shaky mobile video. In it, she sat on stairs, wearing a yellow skirt. Suddenly, she looked up at him and smiled. There was a blue bruise on her cheek, but the smile was red and joyous, trusting and innocent. 
 
 He watched it three times and knew he loved her. 

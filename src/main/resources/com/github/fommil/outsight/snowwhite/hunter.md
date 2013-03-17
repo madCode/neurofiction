@@ -1,3 +1,5 @@
+# The Huntsman
+
 The photographer hunts for the princess in the forest of the geeks. 
 
 It is late afternoon. Golden light hits the old factory’s red brick walls. It would make a good shot, if not for the kids wearing makeup and carrying padded giant swords. 
@@ -10,7 +12,7 @@ And he has no choice but to obey the Voice. The Voice knows too much, and has ch
 
 The metal of the camera is cold in his hands. He takes a few shots, just to warm up. Boys with paper bags over their heads, in blood-spattered coveralls. Manga-costumed jailbait chicks in pink leggings and schoolgirl uniforms, pillow lips blue from the cold. Stormtroopers and batmen. No sign of the princess yet. A part of him wonders what she has done to deserve this. 
 
-A flash of yellow and blue. *There*. He snaps a photo, and almost drop the camera when a zombie princess growls at you, thrusting a pair of blood-spattered pair of boobs at your face. Her teeth glint yellow against pale white makeup.
+A flash of yellow and blue. *There*. He snaps a photo, and almost drop the camera when a zombie princess growls at him, thrusting a pair of blood-spattered pair of boobs at his face. Her teeth glint yellow against pale white makeup.
 
 There are many princesses here, all in the same colours. Superhero versions, vampire versions, even a cross-dressing one. He swears. It is getting dark already, and there is not going to be enough light for a good shot if he doesn’t find her soon. His gut tightens.  
 
