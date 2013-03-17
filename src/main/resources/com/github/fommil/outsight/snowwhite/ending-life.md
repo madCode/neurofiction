@@ -1,3 +1,5 @@
+# Life
+
 I am everything you could ever want. I am everything that you can’t buy, you who sit there in your white coat, with your slicked-back hair and Biaritz tan and expensive watch and a faint smell of pine in your aftershave. 
 
 I am life. I am innocence. I am fragile. I am sweet. I am the thing you made, from chemicals and electric dreams. 
