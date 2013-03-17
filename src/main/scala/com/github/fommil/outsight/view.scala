@@ -73,12 +73,10 @@ class StoryView(story: Story, callback: (Journey, Scene) => Unit) extends JFrame
     }
   })
 
-  def update(journey: Journey) {
+  def update(journey: Journey, scene: Scene) {
     this.journey = journey
-    this.scene = story.transitions.next(journey)
+    this.scene = scene
     xhtml.setDocument(scene.xml)
   }
-
-  update(Journey(Nil, Nil))
 
 }

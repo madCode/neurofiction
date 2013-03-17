@@ -21,22 +21,28 @@ object Main extends App with JavaLogging {
   val rules = SnowWhiteRules()
   val story = Story(Set(EmotivHistExtractor(rules)), rules)
 
+
   val view = new StoryView(story, cut)
   fullscreen(view)
 
   def cut(journey: Journey, scene: Scene) {
     val session = db.getSession
-    session.setName(scene.toString)
-    session.setNotes(journey.toString)
+    //session.setName(scene.toString)
+    //session.setNotes(journey.toString)
     db.updateSession(session)
-
     val response = EmotivResponse(session)
     val latest = (scene, Set[Response]() + response)
+    val update: Journey = journey.copy(
+      scenes = journey.scenes :+ latest
+    )
+
     val newSession = new EmotivSession
     newSession.setSitting(session.getSitting)
     newSession.setSubject(session.getSubject)
     db.setSession(newSession)
-    view.update(journey.copy(scenes = journey.scenes :+ latest))
+
+    val next = story.transitions.next(update)
+    view.update(next._1, next._2)
   }
 
 }

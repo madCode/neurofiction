@@ -1,6 +1,7 @@
 package com.github.fommil.outsight
 
 import com.github.fommil.emokit.jpa.EmotivSession
+import scala.util.Random
 
 
 /** For calculating transitions between `Scene`s, and may be shown to the audience. */
@@ -15,11 +16,12 @@ trait VariableExtractor {
     * Will be combined with other `Variable`s obtained from
     * other implementations after every `Scene`.
     */
-  def variables(journey: Journey): Set[Variable]
+  def variables(journey: Journey): List[Variable]
 }
 
 
 case class EmotivResponse(session: EmotivSession) extends Response
+
 case class EmotivHistVariable(sample: Scene, similar: Scene) extends Variable
 
 trait EmotivHistRestriction {
@@ -34,5 +36,10 @@ case class EmotivHistExtractor(restriction: EmotivHistRestriction) extends Varia
 
   protected def classify(data: List[Histogram], sample: Histogram): Histogram = ???
 
-  def variables(journey: Journey) = ???
+  def variables(journey: Journey) = {
+    // DUMMY
+    val scenes = restriction.restriction.toArray
+    val random = scenes(new Random().nextInt(restriction.restriction.size))
+    EmotivHistVariable(journey.scenes.last._1, random) :: Nil
+  }
 }

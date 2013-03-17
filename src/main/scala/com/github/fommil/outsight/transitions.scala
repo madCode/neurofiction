@@ -1,8 +1,10 @@
 package com.github.fommil.outsight
 
+import scala.util.Random
+
 trait TransitionCalculator {
 
-  def next(journey: Journey): Scene
+  def next(journey: Journey): (Journey, Scene)
 
 }
 
@@ -14,20 +16,29 @@ case class SnowWhiteRules() extends TransitionCalculator with EmotivHistRestrict
 
   def restriction = Set() + scene("life1") + scene("death1")
 
+  private val dynamic = ("kiss" :: "queen" :: "dwarfs" :: "hunter" :: Nil).map(scene _)
+
   def next(journey: Journey) =
     journey.scenes.reverse match {
-      case Nil => scene("intro")
+      case Nil => (journey, scene("dreaming-princess"))
       case last :: before => nameFor(last) match {
-        case "intro" => scene("dreaming-princess")
-        case "dreaming-princess" => scene("life1")
-        case "life1" => scene("death1")
-        case "death1" => scene("kiss")
-        case "kiss" => scene("queen")
-        case "queen" => scene("dwarfs") // [sic]
-        case "dwarfs" => scene("hunter")
-        case "hunter" => ??? // #5
-        case "ending-death" => Fin
-        case "ending-life" => Fin
+        case "dreaming-princess" => (journey, scene("life1"))
+        case "life1" => (journey, scene("death1"))
+        case "death1" | "kiss" | "queen" | "dwarfs" | "hunter" =>
+          val seen = journey.scenes.map(_._1)
+          val available = dynamic.filterNot(seen.contains _)
+
+          val classifier = EmotivHistExtractor(this)
+          val variables = classifier.variables(journey)
+          val update = journey.copy(variables = variables)
+
+          (update,
+            if (available.isEmpty) scene("ending-death")
+            else available(new Random().nextInt(available.length))
+          )
+
+        case "ending-death" => (journey, Fin)
+        case "ending-life" => (journey, Fin)
         case _ => throw new IllegalArgumentException
       }
     }
