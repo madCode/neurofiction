@@ -1,8 +1,8 @@
 
-# simple histogram intersection
+# simple histogram intersection [done]
 
+# Try also: 
 # Kullback-Leibler  -> Jensen-Shannon
-
 
 histIntersection <- function(hist1,hist2){
   # Computes the histogram intersection between two histograms a_i, b_i with N bins.  
