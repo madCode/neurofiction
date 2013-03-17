@@ -23,12 +23,14 @@ object Main extends App with JavaLogging {
 
 
   val view = new StoryView(story, cut)
+  val start = story.transitions.next(Journey(Nil, Nil))
+  view.update(start._1, start._2)
   fullscreen(view)
 
   def cut(journey: Journey, scene: Scene) {
     val session = db.getSession
-    //session.setName(scene.toString)
-    //session.setNotes(journey.toString)
+    session.setName(scene.toString)
+    session.setNotes(journey.toString)
     db.updateSession(session)
     val response = EmotivResponse(session)
     val latest = (scene, Set[Response]() + response)
