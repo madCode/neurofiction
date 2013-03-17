@@ -3,7 +3,7 @@ package com.github.fommil.outsight
 import akka.contrib.jul.JavaLogging
 import com.github.fommil.swing.SwingConvenience.fullscreen
 import com.github.fommil.emokit.Emotiv
-import com.github.fommil.emokit.jpa.{EmotivDistributor, EmotivJpaController, EmotivSession}
+import com.github.fommil.emokit.jpa.{EmotivJpaController, EmotivSession}
 import scala.collection.JavaConversions._
 import com.github.fommil.jpa.CrudDao
 
@@ -12,12 +12,11 @@ object Main extends App with JavaLogging {
   val emf = CrudDao.createEntityManagerFactory("OutsightPU")
 
   val emotiv = new Emotiv
-  val distributor = new EmotivDistributor(emotiv)
   val db = new EmotivJpaController(emf)
+  emotiv.addEmotivListener(db)
+  emotiv.start()
   db.setSession(new EmotivSession)
   db.setRecording(true)
-  distributor.addPacketListener(db)
-  distributor.start()
 
   val rules = SnowWhiteRules()
   val story = Story(Set(EmotivHistExtractor(rules)), rules)
@@ -33,7 +32,10 @@ object Main extends App with JavaLogging {
 
     val response = EmotivResponse(session)
     val latest = (scene, Set[Response]() + response)
-    db.setSession(new EmotivSession)
+    val newSession = new EmotivSession
+    newSession.setSitting(session.getSitting)
+    newSession.setSubject(session.getSubject)
+    db.setSession(newSession)
     view.update(journey.copy(scenes = journey.scenes :+ latest))
   }
 
