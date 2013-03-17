@@ -1,8 +1,8 @@
 package com.github.fommil.outsight
 
-import org.xhtmlrenderer.simple.{FSScrollPane, XHTMLPanel}
+import org.xhtmlrenderer.simple.XHTMLPanel
 import javax.swing._
-import java.awt.{Point, BorderLayout}
+import java.awt.{Rectangle, Point, BorderLayout}
 import java.awt.event._
 import akka.contrib.jul.JavaLogging
 import javax.swing.event.{ChangeEvent, ChangeListener}
@@ -19,28 +19,18 @@ class StoryView(story: Story, callback: (Journey, Scene) => Unit) extends JFrame
   add(layers, BorderLayout.CENTER)
 
   private val xhtml = new XHTMLPanel
-  private val scroll = new FSScrollPane(xhtml)
-  scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED)
-  xhtml.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
-    KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0),
-    FSScrollPane.PAGE_DOWN
-  )
+  private val scroll = new JScrollPane(xhtml)
+  scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER)
 
   layers.add(scroll)
   layers.setLayer(scroll, 0)
 
-  private val next = new JButton("Next")
-  next.setSize(150, 150)
+  private val next = new JLabel("Press Space to proceed")
+  next.setSize(150, 125)
   next.setFocusable(false)
   next.setVisible(false)
   layers.add(next)
   layers.setLayer(next, 1)
-
-  next.addActionListener(new ActionListener {
-    def actionPerformed(e: ActionEvent) {
-      callback(journey, scene)
-    }
-  })
 
   layers.addComponentListener(new ComponentAdapter {
     override def componentResized(e: ComponentEvent) {
@@ -62,9 +52,24 @@ class StoryView(story: Story, callback: (Journey, Scene) => Unit) extends JFrame
   })
 
   addKeyListener(new KeyAdapter {
-    override def keyPressed(e: KeyEvent) = e.getKeyChar match {
-      case ' ' if next.isVisible => next.doClick()
-      case _ =>
+    override def keyPressed(e: KeyEvent) = {
+      val view = scroll.getViewport
+      e.getKeyCode match {
+        // WORKAROUND: http://code.google.com/p/flying-saucer/issues/detail?id=219
+        case KeyEvent.VK_SPACE if next.isVisible =>
+          callback(journey, scene)
+          view.setViewPosition(new Point)
+
+        case KeyEvent.VK_SPACE | KeyEvent.VK_DOWN =>
+          val where = (view.getViewPosition.getLocation.y + view.getHeight + 50)
+          xhtml.scrollRectToVisible(new Rectangle(0, where, 0, 0))
+
+        case KeyEvent.VK_UP =>
+          val where = (view.getViewPosition.getLocation.y - 50)
+          xhtml.scrollRectToVisible(new Rectangle(0, where, 0, 0))
+
+        case _ =>
+      }
     }
   })
 
@@ -72,7 +77,6 @@ class StoryView(story: Story, callback: (Journey, Scene) => Unit) extends JFrame
     this.journey = journey
     this.scene = story.transitions.next(journey)
     xhtml.setDocument(scene.xml)
-    scroll.getViewport.setViewPosition(new Point)
   }
 
   update(Journey(Nil, Nil))
