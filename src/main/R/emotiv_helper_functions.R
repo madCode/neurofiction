@@ -39,8 +39,10 @@ loadEmotivSession <- function(session.name,database.name = "zoku"){
   #   session.name: The name assigned to the Emotiv session in emokit-java. 
   #   database.name: The PostgreSQL database name. Defaults to zoku but included as parameter for future use. 
   # Returns: 
-  # A list of data frames containing the data with session IDs; just a data frame if the session ID is unique. (The session ID should be unique, but there appears to be some confusion with )
-
+  # A list of data frames containing the data with session IDs; just a data frame if the session ID is unique. 
+  # Note that for the sensors, the data is converted into time series data. 
+  
+  
   # Load libraries. 
   require(DBI) # R relational database interfaces. 
   require(RPostgreSQL) # emokit-java uses PostgreSQL. 
@@ -53,6 +55,9 @@ loadEmotivSession <- function(session.name,database.name = "zoku"){
   # Note that dbGetQuery returns a data frame with all the records. 
   # Need to use paste command to construct the search query. 
   session.query.result <- dbGetQuery(con,paste("select * from emotivsession where name =","'",session.name,"'",sep=""))
+  
+  # Now want to convert these into a time series object...
+  
   # session.id is a character vector with the ids. 
   session.ids <- session.query.result$id
   
@@ -66,7 +71,7 @@ loadEmotivSession <- function(session.name,database.name = "zoku"){
     session.data <- dbGetQuery(con, paste("select * from emotivdatum where session_id = ","'",id,"'",sep=""))
 	
 	# For convenience, let's also make a new time vector 
-	
+	session.data <- convertEmotivSessionToTs(session.data)
 	
     session.results[[i]] <- session.data
     i <- i+1 
@@ -110,6 +115,13 @@ loadEmotivTimeInterval <- function(timestamp1,timestamp2,database.name = "zoku")
   dbDisconnect(con)
   
   return(interval.data)
+  
+  
+}
+
+cleanEmotivData <- function(eeg.data,treshold){
+  
+  
   
   
 }
@@ -259,3 +271,20 @@ compareTwoSensors <- function(eeg.data){
   
   
 }
+
+convertEmotivSessionToTs <- function(eeg.data){
+  # Converts the emotiv session data frame's sensior fields into 'ts' objects. 
+  # Args: 
+  #   eeg.data: an Emotiv data frame from the postgresql database. 
+  # Returns: a data frame with the sensor fields converted into ts objects. 
+  
+  sensors <- c("af3","af4","f3","f4","f7","f8","fc5","fc6","o1","o2","p7","p8","t7","t8","gyrox","gyroy")
+  
+  for (sensor in sensors){
+    eeg.data[[sensor]] <- ts(eeg.data[[sensor]],frequency=128)
+  }
+  return(eeg.data)
+  
+}
+
+
