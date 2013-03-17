@@ -1,3 +1,5 @@
+# The Dwarves
+
 Little by little, we gather all her pieces together, in the glass coffin. Her emails, her Facebook updates, her health records. The duck-face pictures, the cosplay posing. The video from the convention, the one where she smiles. 
 
 It takes hours of coding in the dark. Our faces are cratered alien planets in the monitor glow, greasy from lack of sleep. The flat is hot with the breath of our machines. 
