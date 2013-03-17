@@ -1,34 +1,13 @@
 
-setwd("~/Documents/Projects/outsight/src/main/R")
-source("emotiv_helper_functions.R")
-source("emotiv_analysis_functions.R")
-source("emotiv_classification.R")
-
-story <- data.frame(start="Dreaming Princess",training=c("Life","Death"),scenes=c("Kiss","Dwarfs","Hunter","Queen"),visited=c(FALSE, FALSE, FALSE, FALSE),fin=c("Ending: Life","Ending: Death"),stringsAsFactors=FALSE)
-
-# The column ordering is K, D, H, Q. The row gives the transition probabilities to a new scene. 
-transition.death <- matrix(c(0.0,0.2,0.6,0.2,0.2,0.0,0.2,0.2,0.2,0.6,0.0,0.6,0.6,0.2,0.2,0.0),nrow=4,byrow=TRUE)
-transition.life <- matrix(c(0.0,0.6,0.2,0.6,0.6,0.0,0.6,0.2,0.2,0.2,0.0,0.2,0.2,0.2,0.2,0.0),nrow=4, byrow=TRUE)
-
-# Load some examples - nothing to do with Snow White, but just to show it works... 
-sam.frown <- loadEmotivSession("Sam Frowning")
-sam.zelazny <- loadEmotivSession("Sam - Zelazny")
-sam.interested <- loadEmotivSession("Sam - Wilde Happy PRince")
-sam.sw <- loadEmotivSession("Sam Snow White")
-sam.smile <- loadEmotivSession("Sam Smiling")
-sam.shorts <- loadEmotivSession("Sam - hitrecord shorts")
-
-eeg.test <- list(sam.smile,sam.frown,sam.zelazny,sam.shorts,sam.interested,sam.sw)
-
-
-test.sequence <- generateStorySequence(story,eeg.test,t.death=transition.death,t.life=transition.life)
-
+# Functions for a toy version of the Outsight scene transitions. 
+# ------------------------------
 
 generateStorySequence <- function(story,eeg.sessions,t.death,t.life){
   # Generates a story sequence based on emotiv data sessions. 
   # Args: 
-  #   story: a container for the story information. Here just a data frame. 
-  #   eeg.sessions: A list of EEG session data frames. The first two are "life" and "death". 
+  #   story: a container for the story information. Here just a data frame of the form: 
+  #   story <- data.frame(start="Dreaming Princess",training=c("Life","Death"),scenes=c("Kiss","Dwarfs","Hunter","Queen"),visited=c(FALSE, FALSE, FALSE, FALSE),fin=c("Ending: Life","Ending: Death"),stringsAsFactors=FALSE)
+  #   eeg.sessions: A list of EEG session data frames. The first two are "life" and "death", the rest are the scenes in the canonical order. 
   #   The rest should be in same order as the scene list. (Kiss, Dwarfs, Hunter, Queen)
   
   # FIXME Lists can have names, so should use names for the scenes...! 
@@ -43,29 +22,29 @@ generateStorySequence <- function(story,eeg.sessions,t.death,t.life){
   story$visited[match(current,story$scenes)] <- TRUE
   scene.sequence[[1]] <- current
   
-  show(current)
+  #  show(current)
   # Keep track of total life/death score. 
   total.life <- emotivSessionDistance(eeg.life,eeg.scenes[[match(current,story$scenes)]])
   total.death <- emotivSessionDistance(eeg.life,eeg.scenes[[match(current,story$scenes)]])
-  show(total.life)
-  show(total.death)
+  # show(total.life)
+  # show(total.death)
   
   # After the initial scene, generate 
   for (i in 1:3){
     scene.new <- nextScene(current,
-                          scenes=story$scenes,
-                         visited=story$visited,
-                         eeg.current=eeg.scenes[[match(current,story$scenes)]],
-                         eeg.life=eeg.life,eeg.death=eeg.death,t.death=t.death,t.life=t.life)  
+                           scenes=story$scenes,
+                           visited=story$visited,
+                           eeg.current=eeg.scenes[[match(current,story$scenes)]],
+                           eeg.life=eeg.life,eeg.death=eeg.death,t.death=t.death,t.life=t.life)  
     current <- scene.new$nextscene
-    show(current)
+    #    show(current)
     # Update visited list. 
     story$visited[match(current,story$scenes)] <- TRUE
     show(story$visited)
     # Update life / death score. 
     total.life <- total.life + scene.new$life
     total.death <- total.death <- scene.new$death
-  
+    
     scene.sequence[[i+1]] <- current
   }
   # Last remaining scene is... 
@@ -124,14 +103,13 @@ updateTransitionMatrix <- function(visited,transition){
       transition[i,] <- 0.0
       # Normalise columns. 
       for (j in 1:4)
-      transition[,j] <- transition[,j]/sum(transition[,j])
+        transition[,j] <- transition[,j]/sum(transition[,j])
       
     }
     i<- i+1
   }
-  # FIXME remove this
-  show(transition)
+  
+  # show(transition)
   return(transition)
   
 }
-

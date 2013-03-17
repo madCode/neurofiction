@@ -121,7 +121,7 @@ loadEmotivTimeInterval <- function(timestamp1,timestamp2,database.name = "zoku")
 
 cleanEmotivData <- function(eeg.data,treshold){
   
-  
+  # TODO
   
   
 }
