@@ -5,7 +5,12 @@ source("emotiv_analysis_functions.R")
 source("emotiv_classification.R")
 source("outsight_scene_transitions.R")
 
-story <- data.frame(start="Dreaming Princess",training=c("Life","Death"),scenes=c("Kiss","Dwarfs","Hunter","Queen"),visited=c(FALSE, FALSE, FALSE, FALSE),fin=c("Ending: Life","Ending: Death"),stringsAsFactors=FALSE)
+story <- data.frame(start="Dreaming Princess",
+                    training=c("Life","Death"),
+                    scenes=c("Kiss","Dwarfs","Hunter","Queen"),
+                    visited=c(FALSE, FALSE, FALSE, FALSE),
+                    fin=c("Ending: Life","Ending: Death"),
+                    stringsAsFactors=FALSE)
 
 # The canonical column ordering is K, D, H, Q. The row gives the transition probabilities to a new scene. 
 transition.death <- matrix(c(0.0,0.2,0.6,0.2,0.2,0.0,0.2,0.2,0.2,0.6,0.0,0.6,0.6,0.2,0.2,0.0),nrow=4,byrow=TRUE)
