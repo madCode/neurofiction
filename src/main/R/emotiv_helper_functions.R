@@ -32,6 +32,28 @@ listEmotivSessions <- function(database.name="zoku"){
 }
 
 
+listEmotivSittings <- function(database.name="outsight"){
+  # Lists the sittings in the database. 
+  # Args: 
+  #   database.name: Name of the PostgreSQL database. 
+  # Returns: a vector of sitting IDs. 
+  
+  # Load database libraries. 
+  require(DBI) # R relational database interfaces. 
+  require(RPostgreSQL) # emokit-java uses PostgreSQL.
+  # Load database driver and open a connection. 
+  drv <- dbDriver("PostgreSQL")
+  con <- dbConnect(drv,dbname=database.name,user="postgres") 
+  
+  sittings <- dbGetQuery(con,"select sitting from emotivsession") 
+  dbDisconnect(con)
+  
+  return(sittings)
+  
+  
+  
+}
+
 loadEmotivSession <- function(session.name,database.name = "zoku"){
   # Loads an Emotiv EPOC session recorded with emokit-java with the name session.name from the default PostgreSQL database. 
   #
@@ -91,6 +113,100 @@ loadEmotivSession <- function(session.name,database.name = "zoku"){
   return(session.results)
   
 }
+
+loadEmotivSessions <- function(sessions,database.name="outsight"){
+  # Loads a list of Emotiv sessions from the database. 
+  # Args: 
+  #   sessions: a vector of session names. 
+  #   database.name: the PostgreSQL database. 
+  # Returns: a list of Emotiv data frames. 
+  
+  results <- list()
+  i <- 1
+  
+  for (s in sessions){
+    results[[i]] <- loadEmotivSession(session.name=s,database.name=database.name)
+    i <- i+1
+    
+  }
+  return(results)
+  
+}
+
+
+
+
+listSittingSessions <- function(sitting,database.name="outsight"){
+  # Gives a list of sessions with a given sitting ID. 
+  
+  # Load libraries. 
+  require(DBI) # R relational database interfaces. 
+  require(RPostgreSQL) # emokit-java uses PostgreSQL. 
+  
+  # Load database driver and open a connection. 
+  drv <- dbDriver("PostgreSQL")
+  con <- dbConnect(drv,dbname=database.name,user="postgres")  
+  # List of sessions with the right ID. 
+  session.query.result <- dbGetQuery(con,paste("select * from emotivsession where sitting= ","'",sitting,"'",sep=""))
+  
+  return(session.query.result)
+  
+  
+}
+
+
+loadEmotivSitting <- function(sitting,database.name="outsight"){
+  # Load all the sessions for a single sitting and return them in a list. 
+  
+  # Load libraries. 
+  require(DBI) # R relational database interfaces. 
+  require(RPostgreSQL) # emokit-java uses PostgreSQL. 
+  
+  # Load database driver and open a connection. 
+  drv <- dbDriver("PostgreSQL")
+  con <- dbConnect(drv,dbname=database.name,user="postgres")  
+  # List of sessions with the right ID. 
+  session.query.result <- dbGetQuery(con,paste("select * from emotivsession where sitting= ","'",sitting,"'",sep=""))
+  
+  # Now want to convert these into a time series object...
+  
+  # session.id is a character vector with the ids. 
+  session.ids <- session.query.result$id
+  
+  # Create an empty list to hold the query results. 
+  session.results <- list()
+  
+  # Clumsy index variable to iterate through the session ids and add them to the list. 
+  i = 1
+  for (id in session.ids){
+    # FIXME correct use of quotes below? 
+    session.data <- dbGetQuery(con, paste("select * from emotivdatum where session_id = ","'",id,"'",sep=""))
+    
+    # For convenience, let's also make a new time vector 
+    session.data <- convertEmotivSessionToTs(session.data)
+    
+    session.results[[i]] <- session.data
+    i <- i+1 
+  }
+  
+  #if (length(session.results) > 1){
+  #  message("The session ID was not unique.")
+  #}
+  #else {
+    # If the session ID is unique, just return the data frame. 
+  #  session.results <- session.results[[1]]
+  #}
+  # TODO add some error handling
+  # TODO add a time vector generator so plotting becomes easier... 
+  dbDisconnect(con)
+    
+  return(session.results)
+
+}
+
+
+
+
 
 loadEmotivTimeInterval <- function(timestamp1,timestamp2,database.name = "zoku"){
   # Loads data recorded with an Emotiv EPOC and emokit-java from the default PostgreSQL database, between the given timestamps.
