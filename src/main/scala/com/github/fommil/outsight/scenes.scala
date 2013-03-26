@@ -34,8 +34,7 @@ trait Response
   */
 case class Journey(history: List[ObservedScene] = Nil) {
 
-  // maybe these should take calculators...
-  def add(scene: Scene, responses: Response*) =
+  def +(scene: Scene, responses: Response*) =
     copy(history = ObservedScene(scene, responses) :: history)
 
 }

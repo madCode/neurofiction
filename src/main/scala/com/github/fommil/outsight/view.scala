@@ -8,15 +8,11 @@ import akka.contrib.jul.JavaLogging
 import javax.swing.event.{ChangeEvent, ChangeListener}
 
 // callback is called when the user requests the next scene
-class StoryView(
-                 callback: (Journey, Scene) => Unit,
-                 start: Scene = null,
-                 initial: Seq[Variable] = Nil
-               ) extends JFrame("Insight / Outsight") with JavaLogging {
+class StoryView(callback: (Journey, Scene) => Unit) extends JFrame("Insight / Outsight") with JavaLogging {
 
-  private var journey: Journey = Journey()
-  private var scene: Scene = start
-  private var variables: Seq[Variable] = Nil
+  var journey: Journey = Journey()
+  var scene: Scene = null
+  var variables: Seq[Variable] = Nil
 
   setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)
   setLayout(new BorderLayout)

@@ -9,7 +9,7 @@ class SnowWhiteSpecs extends Specification {
     "appear in the correct order" in {
 
       val rules = new SnowWhiteRules
-      def next(journey: Journey) = journey.add(rules.next(journey, Nil))
+      def next(journey: Journey) = journey + rules.next(journey, Nil)
 
       val chapter1 = next(Journey())
       val chapter2 = next(chapter1)
