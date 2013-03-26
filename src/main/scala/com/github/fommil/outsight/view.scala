@@ -8,7 +8,8 @@ import akka.contrib.jul.JavaLogging
 import javax.swing.event.{ChangeEvent, ChangeListener}
 
 // callback is called when the user requests the next scene
-class StoryView(callback: (Journey, Scene) => Unit) extends JFrame("Insight / Outsight") with JavaLogging {
+class StoryView(cutscene: (Journey, Scene) => Unit,
+                back: (Journey, Seq[Variable]) => Unit) extends JFrame("Insight / Outsight") with JavaLogging {
 
   private var journey: Journey = null
   private var scene: Scene = null
@@ -26,7 +27,7 @@ class StoryView(callback: (Journey, Scene) => Unit) extends JFrame("Insight / Ou
   layers.add(scroll)
   layers.setLayer(scroll, 0)
 
-  private val next = new JLabel("Press Space to proceed")
+  private val next = new JLabel("Press Enter to proceed")
   next.setSize(150, 125)
   next.setFocusable(false)
   next.setVisible(false)
@@ -57,8 +58,8 @@ class StoryView(callback: (Journey, Scene) => Unit) extends JFrame("Insight / Ou
       val view = scroll.getViewport
       e.getKeyCode match {
         // WORKAROUND: http://code.google.com/p/flying-saucer/issues/detail?id=219
-        case KeyEvent.VK_SPACE if next.isVisible =>
-          callback(journey, scene)
+        case KeyEvent.VK_ENTER if next.isVisible =>
+          cutscene(journey, scene)
           view.setViewPosition(new Point)
 
         case KeyEvent.VK_SPACE | KeyEvent.VK_DOWN =>
@@ -68,6 +69,9 @@ class StoryView(callback: (Journey, Scene) => Unit) extends JFrame("Insight / Ou
         case KeyEvent.VK_UP =>
           val where = (view.getViewPosition.getLocation.y - 50)
           xhtml.scrollRectToVisible(new Rectangle(0, where, 0, 0))
+
+        case KeyEvent.VK_LEFT =>
+          back(journey, variables)
 
         case _ =>
       }

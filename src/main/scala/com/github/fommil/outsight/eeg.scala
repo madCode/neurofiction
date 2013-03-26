@@ -9,14 +9,10 @@ import com.codeminders.hidapi.HIDDeviceNotFoundException
 import java.io.IOException
 
 // Finite state machine {stopped, started}.
-// A started state can be restarted and polled for session responses.
+// A started state can be restarted.
+// Only a started state will have data associated to `response`.
 //
 // https://github.com/fommil/outsight/issues/31
-//
-// We are essentially wrapping the mutable Java API for the EEG device.
-//
-// We could potentially use this to give subtle visual feedback
-// (e.g. a broken connection symbol in the corner) when we have problems.
 object Eeg extends EmotivListener with JavaLogging {
 
   private val emf = CrudDao.createEntityManagerFactory("OutsightPU")
@@ -88,8 +84,6 @@ object Eeg extends EmotivListener with JavaLogging {
   }
 
   def response(journey: Journey, scene: Scene) = this.synchronized {
-//    require(!stopped)
-
     val session = db.getSession
     session.setName(scene.toString)
     session.setNotes(journey.toString)
@@ -98,10 +92,15 @@ object Eeg extends EmotivListener with JavaLogging {
     db.updateSession(session)
 
     val newSession = new EmotivSession
-    db.setSession(newSession)
+    db.createSession(newSession)
 
     EmotivResponse(session)
   }
 
-}
+  def reassign(response: EmotivResponse) {
+    this.synchronized {
+      db.setSession(response.session)
+    }
+  }
 
+}
