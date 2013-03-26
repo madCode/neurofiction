@@ -4,47 +4,52 @@ import akka.contrib.jul.JavaLogging
 import com.github.fommil.swing.SwingConvenience.fullscreen
 import com.github.fommil.emokit.Emotiv
 import com.github.fommil.emokit.jpa.{EmotivJpaController, EmotivSession}
-import scala.collection.JavaConversions._
 import com.github.fommil.jpa.CrudDao
+import java.util.UUID
 
 object Main extends App with JavaLogging {
 
   val emf = CrudDao.createEntityManagerFactory("OutsightPU")
 
-  val emotiv = new Emotiv
+  val sitting = UUID.randomUUID()
+  val subject = "Test Subject" // TODO #9
+
   val db = new EmotivJpaController(emf)
-  emotiv.addEmotivListener(db)
-  emotiv.start()
-  db.setSession(new EmotivSession)
-  db.setRecording(true)
+  val rules: Rules = new SnowWhiteRules
+  val view = new StoryView(cut, rules.start)
 
-  val rules = SnowWhiteRules()
-  val story = Story(Set(EmotivHistExtractor(rules)), rules)
-
-
-  val view = new StoryView(story, cut)
-  val start = story.transitions.next(Journey(Nil, Nil))
-  view.update(start._1, start._2)
+  startEmotivRecording()
   fullscreen(view)
 
   def cut(journey: Journey, scene: Scene) {
+    val session = getAndRecreateSession(journey, scene)
+    // could be abstracted for multiple response types
+    val current = journey.add(scene, EmotivResponse(session))
+    val variables = rules.extract(current)
+    val next = rules.next(current, variables)
+
+    view.updateModel(current, next, variables)
+  }
+
+  def getAndRecreateSession(journey: Journey, scene: Scene) = {
     val session = db.getSession
     session.setName(scene.toString)
     session.setNotes(journey.toString)
+    session.setSitting(sitting)
+    session.setSubject(subject)
     db.updateSession(session)
-    val response = EmotivResponse(session)
-    val latest = (scene, Set[Response]() + response)
-    val update: Journey = journey.copy(
-      scenes = journey.scenes :+ latest
-    )
 
     val newSession = new EmotivSession
-    newSession.setSitting(session.getSitting)
-    newSession.setSubject(session.getSubject)
     db.setSession(newSession)
 
-    val next = story.transitions.next(update)
-    view.update(next._1, next._2)
+    session
   }
 
+  def startEmotivRecording() {
+    val emotiv = new Emotiv
+    emotiv.addEmotivListener(db)
+    emotiv.start()
+    db.setSession(new EmotivSession)
+    db.setRecording(true)
+  }
 }

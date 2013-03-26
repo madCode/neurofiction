@@ -22,15 +22,11 @@ trait VariableExtractor {
 
 case class EmotivResponse(session: EmotivSession) extends Response
 
-case class EmotivHistVariable(sample: Scene, similar: Scene) extends Variable
-
-trait EmotivHistRestriction {
-  def restriction: Set[Scene]
-}
+case class EmotivHistVariable(similar: Scene) extends Variable
 
 // a machine learning classifier that finds the
 // most similar previous Scene for a sample Scene.
-case class EmotivHistExtractor(restriction: EmotivHistRestriction) extends VariableExtractor {
+case class EmotivHistExtractor(restriction: Seq[Scene]) extends VariableExtractor {
 
   type Histogram = Map[Int, Double]
 
@@ -38,8 +34,7 @@ case class EmotivHistExtractor(restriction: EmotivHistRestriction) extends Varia
 
   def variables(journey: Journey) = {
     // DUMMY
-    val scenes = restriction.restriction.toArray
-    val random = scenes(new Random().nextInt(restriction.restriction.size))
-    EmotivHistVariable(journey.scenes.last._1, random) :: Nil
+    val random = restriction(new Random().nextInt(restriction.length))
+    EmotivHistVariable(random) :: Nil
   }
 }

@@ -2,45 +2,48 @@ package com.github.fommil.outsight
 
 import scala.util.Random
 
-trait TransitionCalculator {
+trait Rules {
 
-  def next(journey: Journey): (Journey, Scene)
+  def start = next(Journey(), Nil)
+
+  def next(journey: Journey, variables: Seq[Variable]): Scene
+
+  def extract(journey: Journey): Seq[Variable]
 
 }
 
-case class SnowWhiteRules() extends TransitionCalculator with EmotivHistRestriction {
+
+class SnowWhiteRules extends Rules {
 
   private def scene(name: String) = Scene(s"classpath:com/github/fommil/outsight/snowwhite/$name.md")
 
-  private def nameFor(pair: (Scene, Set[Response])) = pair._1.resource.split("/").last.replace(".md", "")
-
-  def restriction = Set() + scene("life1") + scene("death1")
+  private val endings = scene("life1") :: scene("death1") :: Nil
 
   private val dynamic = ("kiss" :: "queen" :: "dwarfs" :: "hunter" :: Nil).map(scene _)
 
-  def next(journey: Journey) =
-    journey.scenes.reverse match {
-      case Nil => (journey, scene("dreaming-princess"))
-      case last :: before => nameFor(last) match {
-        case "dreaming-princess" => (journey, scene("life1"))
-        case "life1" => (journey, scene("death1"))
-        case "death1" | "kiss" | "queen" | "dwarfs" | "hunter" =>
-          val seen = journey.scenes.map(_._1)
-          val available = dynamic.filterNot(seen.contains _)
+  private val extractors = EmotivHistExtractor(endings) :: Nil
 
-          val classifier = EmotivHistExtractor(this)
-          val variables = classifier.variables(journey)
-          val update = journey.copy(variables = variables)
+  def extract(journey: Journey) = extractors.flatMap(_.variables(journey))
 
-          (update,
-            if (available.isEmpty) scene("ending-death")
-            else available(new Random().nextInt(available.length))
-          )
+  // quite a lot of abstraction is possible here for #4
+  // 1. simple flow
+  // 2. random flow with visited exclusion
+  // 3. split on Variable
+  def next(journey: Journey, variables: Seq[Variable]) =
+    if (journey.history.isEmpty) scene("dreaming-princess")
+    else journey.history.head.scene.title match {
+      case "dreaming-princess" => scene("life1")
+      case "life1" => scene("death1")
+      case "death1" | "kiss" | "queen" | "dwarfs" | "hunter" =>
+        val seen = journey.history.map(_.scene)
+        val available = dynamic.filterNot(seen.contains _)
 
-        case "ending-death" => (journey, Fin)
-        case "ending-life" => (journey, Fin)
-        case _ => throw new IllegalArgumentException
-      }
+        if (available.isEmpty) scene("ending-death")
+        else available(new Random().nextInt(available.length))
+
+      case "ending-death" => Fin
+      case "ending-life" => Fin
+      case _ => throw new IllegalArgumentException
     }
 
 }
