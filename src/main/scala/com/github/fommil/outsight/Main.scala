@@ -10,7 +10,7 @@ object Main extends App with JavaLogging {
 
   val rules: Rules = new SnowWhiteRules
   val view = new StoryView(cut)
-  view.scene = rules.start
+  view.setModel(Journey(), rules.start)
 
   start(subject)
   fullscreen(view)
@@ -20,6 +20,6 @@ object Main extends App with JavaLogging {
     val variables = rules.extract(current)
     val next = rules.next(current, variables)
 
-    view.updateModel(current, next, variables)
+    view.setModel(current, next, variables)
   }
 }

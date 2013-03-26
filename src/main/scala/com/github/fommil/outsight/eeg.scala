@@ -5,6 +5,8 @@ import com.github.fommil.jpa.CrudDao
 import com.github.fommil.emokit.jpa.{EmotivSession, EmotivJpaController}
 import akka.contrib.jul.JavaLogging
 import java.util.UUID
+import com.codeminders.hidapi.HIDDeviceNotFoundException
+import java.io.IOException
 
 // Finite state machine {stopped, started}.
 // A started state can be restarted and polled for session responses.
@@ -29,9 +31,17 @@ object Eeg extends EmotivListener with JavaLogging {
     this.synchronized {
       require(!stopped)
 
-      emotiv = new Emotiv
-      emotiv.addEmotivListener(db)
-      emotiv.start()
+      if (emotiv != null) stop()
+
+      try {
+        emotiv = new Emotiv
+        emotiv.addEmotivListener(db)
+        emotiv.start()
+      } catch {
+        case t: HIDDeviceNotFoundException =>
+          log.error(t, "Starting Emotiv")
+          stop()
+      }
     }
   }
 
@@ -52,8 +62,15 @@ object Eeg extends EmotivListener with JavaLogging {
     this.synchronized {
       stopped = true
       db.setRecording(false)
+
+      if (emotiv == null) return
+
       emotiv.removeEmotivListener(db)
-      emotiv.close()
+      try emotiv.close()
+      catch {
+        case t: IOException => log.error(t, "Closing Emotiv")
+      }
+      emotiv = null
     }
   }
 
@@ -64,13 +81,14 @@ object Eeg extends EmotivListener with JavaLogging {
       if (stopped) return
 
       log.info("Emotiv connection was broken, trying to reconnect")
-      emotiv.removeEmotivListener(db)
+      if (emotiv != null) emotiv.removeEmotivListener(db)
+      Thread.sleep(1000) // limits busy waiting when the device is off
       restart()
     }
   }
 
   def response(journey: Journey, scene: Scene) = this.synchronized {
-    require(!stopped)
+//    require(!stopped)
 
     val session = db.getSession
     session.setName(scene.toString)

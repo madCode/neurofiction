@@ -10,9 +10,9 @@ import javax.swing.event.{ChangeEvent, ChangeListener}
 // callback is called when the user requests the next scene
 class StoryView(callback: (Journey, Scene) => Unit) extends JFrame("Insight / Outsight") with JavaLogging {
 
-  var journey: Journey = Journey()
-  var scene: Scene = null
-  var variables: Seq[Variable] = Nil
+  private var journey: Journey = null
+  private var scene: Scene = null
+  private var variables: Seq[Variable] = null
 
   setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)
   setLayout(new BorderLayout)
@@ -74,7 +74,7 @@ class StoryView(callback: (Journey, Scene) => Unit) extends JFrame("Insight / Ou
     }
   })
 
-  def updateModel(journey: Journey, scene: Scene, variables: Seq[Variable]) {
+  def setModel(journey: Journey, scene: Scene, variables: Seq[Variable] = Nil) {
     require(journey != null)
     require(scene != null)
     require(variables != null)
