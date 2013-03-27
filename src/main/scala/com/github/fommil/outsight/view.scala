@@ -7,16 +7,24 @@ import java.awt.event._
 import akka.contrib.jul.JavaLogging
 import javax.swing.event.{ChangeEvent, ChangeListener}
 
+class OutsightFrame extends JFrame("Insight / Outsight") {
+  setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)
+  setLayout(new BorderLayout)
+
+  def setCentre(pane: JPanel) {
+    add(pane, BorderLayout.CENTER)
+    pane.requestFocus()
+  }
+}
+
 // callback is called when the user requests the next scene
 class StoryView(cutscene: (Journey, Scene) => Unit,
-                back: (Journey, Seq[Variable]) => Unit) extends JFrame("Insight / Outsight") with JavaLogging {
+                back: (Journey, Seq[Variable]) => Unit) extends JPanel(new BorderLayout) with JavaLogging {
 
   private var journey: Journey = null
   private var scene: Scene = null
   private var variables: Seq[Variable] = null
 
-  setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)
-  setLayout(new BorderLayout)
   private val layers = new JLayeredPane
   add(layers, BorderLayout.CENTER)
 
@@ -54,7 +62,7 @@ class StoryView(cutscene: (Journey, Scene) => Unit,
   })
 
   addKeyListener(new KeyAdapter {
-    override def keyPressed(e: KeyEvent) = {
+    override def keyPressed(e: KeyEvent) {
       val view = scroll.getViewport
       e.getKeyCode match {
         // WORKAROUND: http://code.google.com/p/flying-saucer/issues/detail?id=219

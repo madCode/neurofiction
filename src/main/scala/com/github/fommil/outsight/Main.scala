@@ -4,17 +4,20 @@ import akka.contrib.jul.JavaLogging
 import com.github.fommil.swing.SwingConvenience.fullscreen
 import Eeg._
 import javax.swing.{SwingUtilities, SwingWorker}
+import java.awt.BorderLayout
 
 object Main extends App with JavaLogging {
 
   val subject = "Test Subject" // TODO #9
+  val rules = new SnowWhiteRules
 
-  val rules: Rules = new SnowWhiteRules
+  val frame = new OutsightFrame
   val view = new StoryView(cutscene, back)
   view.setModel(Journey(), rules.start)
+  frame.setCentre(view)
 
   start(subject)
-  fullscreen(view)
+  fullscreen(frame)
 
   def cutscene(journey: Journey, scene: Scene) {
     val current = journey +(scene, response(journey, scene))
