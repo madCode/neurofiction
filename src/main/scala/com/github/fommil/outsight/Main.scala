@@ -14,7 +14,10 @@ object Main extends App with JavaLogging {
   val frame = new OutsightFrame
   val view = new StoryView(cutscene, back)
   view.setModel(Journey(), rules.start)
-  frame.setCentre(view)
+
+  frame.setCentre(new IntroductionView)
+
+//  frame.setCentre(view)
 
   start(subject)
   fullscreen(frame)

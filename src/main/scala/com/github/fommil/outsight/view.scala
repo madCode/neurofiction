@@ -2,7 +2,7 @@ package com.github.fommil.outsight
 
 import org.xhtmlrenderer.simple.XHTMLPanel
 import javax.swing._
-import java.awt.{Rectangle, Point, BorderLayout}
+import java.awt.{CardLayout, Rectangle, Point, BorderLayout}
 import java.awt.event._
 import akka.contrib.jul.JavaLogging
 import javax.swing.event.{ChangeEvent, ChangeListener}
@@ -27,6 +27,7 @@ class StoryView(cutscene: (Journey, Scene) => Unit,
 
   private val layers = new JLayeredPane
   add(layers, BorderLayout.CENTER)
+  setFocusable(true)
 
   private val xhtml = new XHTMLPanel
   private val scroll = new JScrollPane(xhtml)
@@ -96,5 +97,59 @@ class StoryView(cutscene: (Journey, Scene) => Unit,
     this.variables = variables
     xhtml.setDocument(scene.xml)
   }
+
+}
+
+// FSM Panel which is in one of 4 states:
+//
+// 0. request with instructions to recharge the device
+// 1. summary introduction and username input
+// 2. displaying instructions for the EEG
+// 3. interactive calibration with visual feedback
+//
+// all stages have a timeout of 5 minutes, reverting to state 0.
+// State 0 will attempt to put the device into power saving mode
+// (i.e. ask someone to charge the device!)
+class IntroductionView extends JPanel with JavaLogging {
+
+  val cards = new CardLayout
+  setLayout(cards)
+  setFocusable(true)
+
+  val panel0 = new JPanel
+  panel0.add(new JLabel("Requesting recharge"))
+
+  val panel1 = new JPanel
+  panel1.add(new JLabel("Summary"))
+
+  val panel2 = new JPanel
+  panel2.add(new JLabel("Instructions"))
+
+  val panel3 = new JPanel
+  panel3.add(new JLabel("Calibration"))
+
+  add(panel0)
+  add(panel1)
+  add(panel2)
+  add(panel3)
+
+  addKeyListener(new KeyAdapter {
+    override def keyPressed(e: KeyEvent) {
+      e.getKeyCode match {
+        case KeyEvent.VK_ENTER if current == Some(panel3) =>
+          log.info("finished...")
+
+        case KeyEvent.VK_ENTER =>
+          cards.next(IntroductionView.this)
+
+        case KeyEvent.VK_LEFT if current != Some(panel0) =>
+          cards.previous(IntroductionView.this)
+
+        case _ =>
+      }
+    }
+  })
+
+  def current = getComponents.filter(_.isVisible).headOption
 
 }
