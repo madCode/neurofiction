@@ -12,21 +12,18 @@ import java.awt.Point
 import java.awt.Rectangle
 import scala.swing.Component
 import scala.swing.Label
-import java.awt.Color
-import scala.swing.GridBagPanel.Fill
 import org.jdesktop.swingx.JXTextField
-import javax.swing.plaf.ColorUIResource
 import com.github.fommil.emokit.{Packet, EmotivListener}
 
+// I'm not proud of this file... @fommil
 
 class OutsightFrame extends JFrame("Insight / Outsight") {
   setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)
   setLayout(new BorderLayout)
 
-  UIManager.put("Panel.background",  Color.WHITE)
-
   def setCentre(pane: JPanel) {
     add(pane, BorderLayout.CENTER)
+    revalidate()
     pane.requestFocus()
   }
 }
@@ -50,7 +47,7 @@ class StoryView(cutscene: (Journey, Scene) => Unit,
   layers.add(scroll)
   layers.setLayer(scroll, 0)
 
-  private val next = new JLabel("Press Enter to proceed")
+  private val next = new JLabel("Press Space to proceed...")
   next.setSize(150, 125)
   next.setFocusable(false)
   next.setVisible(false)
@@ -68,11 +65,22 @@ class StoryView(cutscene: (Journey, Scene) => Unit,
     }
   })
 
+  val timer = new Timer(2000, new ActionListener {
+    def actionPerformed(e: ActionEvent) {
+      next.setVisible(true)
+    }
+  })
+  timer.setRepeats(false)
+
   scroll.getViewport.addChangeListener(new ChangeListener {
     def stateChanged(e: ChangeEvent) {
       val view = scroll.getViewport
       val where = (view.getViewPosition.getY + view.getHeight)
-      next.setVisible(where > 0.99 * xhtml.getSize().getHeight)
+      if (where > 0.99 * xhtml.getSize().getHeight) timer.start()
+      else {
+        next.setVisible(false)
+        timer.stop()
+      }
     }
   })
 
@@ -81,11 +89,14 @@ class StoryView(cutscene: (Journey, Scene) => Unit,
       val view = scroll.getViewport
       e.getKeyCode match {
         // WORKAROUND: http://code.google.com/p/flying-saucer/issues/detail?id=219
-        case KeyEvent.VK_ENTER if next.isVisible =>
+        case (KeyEvent.VK_ENTER | KeyEvent.VK_SPACE) if next.isVisible =>
+          timer.stop()
+          next.setVisible(false)
           cutscene(journey, scene)
+          view.setViewPosition(new Point(1, 0)) // needed to fire the change event
           view.setViewPosition(new Point)
 
-        case KeyEvent.VK_SPACE | KeyEvent.VK_DOWN =>
+        case KeyEvent.VK_ENTER | KeyEvent.VK_SPACE | KeyEvent.VK_DOWN =>
           val where = (view.getViewPosition.getLocation.y + view.getHeight + 50)
           xhtml.scrollRectToVisible(new Rectangle(0, where, 0, 0))
 
@@ -93,7 +104,8 @@ class StoryView(cutscene: (Journey, Scene) => Unit,
           val where = (view.getViewPosition.getLocation.y - 50)
           xhtml.scrollRectToVisible(new Rectangle(0, where, 0, 0))
 
-        case KeyEvent.VK_LEFT =>
+        case KeyEvent.VK_ESCAPE =>
+          timer.stop()
           back(journey, variables)
 
         case _ =>
@@ -109,6 +121,7 @@ class StoryView(cutscene: (Journey, Scene) => Unit,
     this.journey = journey
     this.scene = scene
     this.variables = variables
+
     xhtml.setDocument(scene.xml)
   }
 
@@ -126,13 +139,13 @@ class StoryView(cutscene: (Journey, Scene) => Unit,
 // (i.e. ask someone to charge the device!)
 //
 // can't use scala.swing just yet https://issues.scala-lang.org/browse/SI-3933
-class IntroductionView extends JPanel with JavaLogging with EmotivListener {
+class IntroductionView(introduced: String => Unit) extends JPanel with JavaLogging with EmotivListener {
 
   val cards = new CardLayout
   setLayout(cards)
   setFocusable(true)
 
-  val prompt = "Please let us know your name (or your email address) and then press Enter."
+  val prompt = "Please let us know your name (or your email address) and press Enter."
   val nameField = new JXTextField(prompt)
   nameField.setColumns(42)
   // https://issues.scala-lang.org/browse/SI-7307e
@@ -148,13 +161,11 @@ class IntroductionView extends JPanel with JavaLogging with EmotivListener {
 
   implicit def wrap(j: JComponent) = Component.wrap(j)
 
-
   val panel1 = new BorderPanel() {
 
     import BorderPanel.Position._
 
     layout(new MarkdownPanel("summary")) = Center
-
     layout(new GridBagPanel {
       layout(nameField) = new Constraints
     }) = East
@@ -176,15 +187,8 @@ class IntroductionView extends JPanel with JavaLogging with EmotivListener {
   addKeyListener(new KeyAdapter {
     override def keyPressed(e: KeyEvent) {
       e.getKeyCode match {
-        case KeyEvent.VK_ENTER if current == panel3 =>
-          log.info("finished...")
-
-        case KeyEvent.VK_ENTER =>
-          next()
-
-        case KeyEvent.VK_LEFT if current != panel0 =>
-          previous()
-
+        case KeyEvent.VK_ENTER | KeyEvent.VK_SPACE => next()
+        case KeyEvent.VK_ESCAPE => previous()
         case _ =>
       }
     }
@@ -196,15 +200,20 @@ class IntroductionView extends JPanel with JavaLogging with EmotivListener {
     if (current == panel1 && nameField.getText.isEmpty)
       return
 
+    if (current == panel3) {
+      introduced(nameField.getText)
+    }
+
     cards.next(this)
-    invalidate()
   }
 
   def previous() {
-    cards.previous(this)
+    if (current != panel0 && current != panel1)
+      cards.previous(this)
   }
 
   def receivePacket(p: Packet) {
+    // TODO battery meter
     if (p.getBatteryLevel < 200) {
       cards.first(this)
     }
@@ -212,9 +221,6 @@ class IntroductionView extends JPanel with JavaLogging with EmotivListener {
 
   def connectionBroken() {}
 
-  def username = nameField.getText
-
-  next()
 }
 
 class MarkdownPanel(val resource: String) extends XHTMLPanel with ResourceSupport with MarkdownSupport with XmlSupport {
@@ -225,5 +231,4 @@ class MarkdownPanel(val resource: String) extends XHTMLPanel with ResourceSuppor
   private def xml: Document = htmlToXml(markup)
 
   setDocument(xml)
-
 }

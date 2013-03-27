@@ -2,42 +2,90 @@ package com.github.fommil.outsight
 
 import akka.contrib.jul.JavaLogging
 import com.github.fommil.swing.SwingConvenience.fullscreen
-import Eeg._
-import javax.swing.{SwingUtilities, SwingWorker}
-import java.awt.BorderLayout
+import com.github.fommil.jpa.CrudDao
+import com.github.fommil.emokit.jpa.{EmotivSession, EmotivJpaController}
+import java.util.UUID
+import javax.swing.UIManager
+import java.awt.Color
 
 object Main extends App with JavaLogging {
 
-  val subject = "Test Subject" // TODO #9
+  @volatile var sitting: UUID = null
+  @volatile var subject: String = null
+
+  UIManager.put("Panel.background",  Color.WHITE)
+
   val rules = new SnowWhiteRules
 
-  val frame = new OutsightFrame
+  val emf = CrudDao.createEntityManagerFactory("OutsightPU")
+  val db = new EmotivJpaController(emf)
+
+  val intro = new IntroductionView(introduced)
   val view = new StoryView(cutscene, back)
-  view.setModel(Journey(), rules.start)
 
-  frame.setCentre(new IntroductionView)
-//  frame.setCentre(view)
+  val eeg = new ResilientEmotiv(db, intro)
+  eeg.start()
 
-  start(subject)
+  val frame = new OutsightFrame
   fullscreen(frame)
+  introduce()
+
+
+  def introduce() {
+    db.setRecording(false)
+    view.setFocusable(false) // otherwise TAB can select the view... weird
+    intro.setFocusable(true)
+    frame.setCentre(intro)
+    intro.next()
+  }
+
+  def introduced(subject: String) {
+    this.subject = subject
+    this.sitting = UUID.randomUUID()
+    view.setModel(Journey(), rules.start)
+    db.setSession(new EmotivSession)
+    db.setRecording(true)
+    intro.setFocusable(false)
+    view.setFocusable(true)
+    frame.setCentre(view)
+  }
 
   def cutscene(journey: Journey, scene: Scene) {
     val current = journey +(scene, response(journey, scene))
     val variables = rules.extract(current)
-    val next = rules.next(current, variables)
-
-    view.setModel(current, next, variables)
+    rules.next(current, variables) match {
+      case Fin => introduce()
+      case next => view.setModel(current, next, variables)
+    }
   }
 
   def back(journey: Journey, variables: Seq[Variable]) {
     journey.history match {
       case x :: xs =>
-        Eeg.reassign(x.responses.collect{case r: EmotivResponse => r}.head)
+        val last = x.responses.collect {
+          case r: EmotivResponse => r
+        }.head
+        db.setSession(last.session)
         // we retain the current variables, which could result
         // in temporal weirdness for some stories.
         view.setModel(Journey(xs), x.scene, variables)
       case _ =>
+        introduce()
     }
+  }
+
+  def response(journey: Journey, scene: Scene) = {
+    val session = db.getSession
+    session.setName(scene.toString)
+    session.setNotes(journey.toString)
+    session.setSitting(sitting)
+    session.setSubject(subject)
+    db.updateSession(session)
+
+    val newSession = new EmotivSession
+    db.createSession(newSession)
+
+    EmotivResponse(session)
   }
 
 }
