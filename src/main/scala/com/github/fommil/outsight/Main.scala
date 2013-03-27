@@ -16,7 +16,6 @@ object Main extends App with JavaLogging {
   view.setModel(Journey(), rules.start)
 
   frame.setCentre(new IntroductionView)
-
 //  frame.setCentre(view)
 
   start(subject)

@@ -23,6 +23,7 @@ object Eeg extends EmotivListener with JavaLogging {
   private var sitting: UUID = null
   private var subject: String = null
 
+
   def restart() {
     this.synchronized {
       require(!stopped)

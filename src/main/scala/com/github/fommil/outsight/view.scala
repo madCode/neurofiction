@@ -2,14 +2,28 @@ package com.github.fommil.outsight
 
 import org.xhtmlrenderer.simple.XHTMLPanel
 import javax.swing._
-import java.awt.{CardLayout, Rectangle, Point, BorderLayout}
+import java.awt._
 import java.awt.event._
 import akka.contrib.jul.JavaLogging
 import javax.swing.event.{ChangeEvent, ChangeListener}
+import scala.swing._
+import org.w3c.dom.Document
+import java.awt.Point
+import java.awt.Rectangle
+import scala.swing.Component
+import scala.swing.Label
+import java.awt.Color
+import scala.swing.GridBagPanel.Fill
+import org.jdesktop.swingx.JXTextField
+import javax.swing.plaf.ColorUIResource
+import com.github.fommil.emokit.{Packet, EmotivListener}
+
 
 class OutsightFrame extends JFrame("Insight / Outsight") {
   setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)
   setLayout(new BorderLayout)
+
+  UIManager.put("Panel.background",  Color.WHITE)
 
   def setCentre(pane: JPanel) {
     add(pane, BorderLayout.CENTER)
@@ -110,23 +124,49 @@ class StoryView(cutscene: (Journey, Scene) => Unit,
 // all stages have a timeout of 5 minutes, reverting to state 0.
 // State 0 will attempt to put the device into power saving mode
 // (i.e. ask someone to charge the device!)
-class IntroductionView extends JPanel with JavaLogging {
+//
+// can't use scala.swing just yet https://issues.scala-lang.org/browse/SI-3933
+class IntroductionView extends JPanel with JavaLogging with EmotivListener {
 
   val cards = new CardLayout
   setLayout(cards)
   setFocusable(true)
 
-  val panel0 = new JPanel
-  panel0.add(new JLabel("Requesting recharge"))
+  val prompt = "Please let us know your name (or your email address) and then press Enter."
+  val nameField = new JXTextField(prompt)
+  nameField.setColumns(42)
+  // https://issues.scala-lang.org/browse/SI-7307e
+  nameField.addKeyListener(new KeyAdapter {
+    override def keyPressed(e: KeyEvent) {
+      if (e.getKeyCode == KeyEvent.VK_ENTER) next()
+    }
+  })
 
-  val panel1 = new JPanel
-  panel1.add(new JLabel("Summary"))
+  val panel0 = new FlowPanel() {
+    contents += new Label("Request Recharge")
+  }.peer
 
-  val panel2 = new JPanel
-  panel2.add(new JLabel("Instructions"))
+  implicit def wrap(j: JComponent) = Component.wrap(j)
 
-  val panel3 = new JPanel
-  panel3.add(new JLabel("Calibration"))
+
+  val panel1 = new BorderPanel() {
+
+    import BorderPanel.Position._
+
+    layout(new MarkdownPanel("summary")) = Center
+
+    layout(new GridBagPanel {
+      layout(nameField) = new Constraints
+    }) = East
+  }.peer
+
+  val panel2 = new FlowPanel() {
+    contents += new Label("Instructions")
+  }.peer
+
+  val panel3 = new FlowPanel() {
+    contents += new Label("Calibration")
+  }.peer
 
   add(panel0)
   add(panel1)
@@ -136,20 +176,54 @@ class IntroductionView extends JPanel with JavaLogging {
   addKeyListener(new KeyAdapter {
     override def keyPressed(e: KeyEvent) {
       e.getKeyCode match {
-        case KeyEvent.VK_ENTER if current == Some(panel3) =>
+        case KeyEvent.VK_ENTER if current == panel3 =>
           log.info("finished...")
 
         case KeyEvent.VK_ENTER =>
-          cards.next(IntroductionView.this)
+          next()
 
-        case KeyEvent.VK_LEFT if current != Some(panel0) =>
-          cards.previous(IntroductionView.this)
+        case KeyEvent.VK_LEFT if current != panel0 =>
+          previous()
 
         case _ =>
       }
     }
   })
 
-  def current = getComponents.filter(_.isVisible).headOption
+  def current = getComponents.filter(_.isVisible).head
+
+  def next() {
+    if (current == panel1 && nameField.getText.isEmpty)
+      return
+
+    cards.next(this)
+    invalidate()
+  }
+
+  def previous() {
+    cards.previous(this)
+  }
+
+  def receivePacket(p: Packet) {
+    if (p.getBatteryLevel < 200) {
+      cards.first(this)
+    }
+  }
+
+  def connectionBroken() {}
+
+  def username = nameField.getText
+
+  next()
+}
+
+class MarkdownPanel(val resource: String) extends XHTMLPanel with ResourceSupport with MarkdownSupport with XmlSupport {
+  override lazy val css = loadResource("classpath:/com/github/fommil/outsight/style.css")
+
+  private lazy val markup = markdown(loadResource("classpath:/com/github/fommil/outsight/" + resource + ".md"))
+
+  private def xml: Document = htmlToXml(markup)
+
+  setDocument(xml)
 
 }
