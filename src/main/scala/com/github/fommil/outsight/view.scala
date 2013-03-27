@@ -14,6 +14,8 @@ import scala.swing.Component
 import scala.swing.Label
 import org.jdesktop.swingx.JXTextField
 import com.github.fommil.emokit.{Packet, EmotivListener}
+import BorderPanel.Position._
+import com.github.fommil.emokit.gui.{SensorView, SensorQualityView}
 
 // I'm not proud of this file... @fommil
 
@@ -162,17 +164,19 @@ class IntroductionView(introduced: String => Unit) extends JPanel with JavaLoggi
   implicit def wrap(j: JComponent) = Component.wrap(j)
 
   val panel1 = new BorderPanel() {
-
-    import BorderPanel.Position._
-
     layout(new MarkdownPanel("summary")) = Center
     layout(new GridBagPanel {
       layout(nameField) = new Constraints
     }) = East
   }.peer
 
-  val panel2 = new FlowPanel() {
-    contents += new Label("Instructions")
+  val calibration = new SensorQualityView
+  val feedback = new SensorView
+
+  val panel2 = new BorderPanel() {
+    layout(new MarkdownPanel("instructions")) = North
+    layout(calibration) = Center
+    layout(feedback) = South
   }.peer
 
   val panel3 = new FlowPanel() {
@@ -213,10 +217,15 @@ class IntroductionView(introduced: String => Unit) extends JPanel with JavaLoggi
   }
 
   def receivePacket(p: Packet) {
-    // TODO battery meter
-    if (p.getBatteryLevel < 200) {
-      cards.first(this)
+    if (current == panel2) {
+      calibration.receivePacket(p)
+      feedback.receivePacket(p)
     }
+
+    // TODO battery meter
+//    if (p.getBatteryLevel < 200) {
+//      cards.first(this)
+//    }
   }
 
   def connectionBroken() {}
@@ -231,4 +240,5 @@ class MarkdownPanel(val resource: String) extends XHTMLPanel with ResourceSuppor
   private def xml: Document = htmlToXml(markup)
 
   setDocument(xml)
+
 }
