@@ -1,9 +1,9 @@
 Welcome to **Insight / Outsight**!
 
-Over the next 10 minutes, you'll be shown a short story which will evolve depending on your subconscious responses.
+Soon you'll be reading a short story which responds to your subconscious thoughts.
 
-During the story, you can press **spacebar** (or use the arrow keys) to scroll. At the end of each chapter, again press the space bar to proceed.
+When reading, press the **spacebar** to scroll down and to progress between chapters.
 
-If you make a mistake, and press the spacebar too early, just press the **Escape** button to go back to the last chapter.
+You can scroll up with the &#8593; key and return to a previous chapter by pressing **Esc**.
 
-Once you've told us who you are, we'll show you how to wear the brain scanner.
+Once you've told us who you are, we'll explain how to put on the brain scanner.

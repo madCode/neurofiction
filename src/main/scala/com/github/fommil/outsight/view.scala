@@ -2,20 +2,18 @@ package com.github.fommil.outsight
 
 import org.xhtmlrenderer.simple.XHTMLPanel
 import javax.swing._
-import java.awt._
 import java.awt.event._
 import akka.contrib.jul.JavaLogging
 import javax.swing.event.{ChangeEvent, ChangeListener}
 import scala.swing._
 import org.w3c.dom.Document
-import java.awt.Point
-import java.awt.Rectangle
+import java.awt.{CardLayout, BorderLayout, Point, Rectangle}
 import scala.swing.Component
 import scala.swing.Label
 import org.jdesktop.swingx.JXTextField
 import com.github.fommil.emokit.{Packet, EmotivListener}
 import BorderPanel.Position._
-import com.github.fommil.emokit.gui.{SensorView, SensorQualityView}
+import com.github.fommil.emokit.gui.{BatteryView, SensorView, SensorQualityView}
 
 // I'm not proud of this file... @fommil
 
@@ -49,8 +47,8 @@ class StoryView(cutscene: (Journey, Scene) => Unit,
   layers.add(scroll)
   layers.setLayer(scroll, 0)
 
-  private val next = new JLabel("Press Space to proceed...")
-  next.setSize(150, 125)
+  private val next = new JLabel("Spacebar to continue...")
+  next.setSize(200, 125)
   next.setFocusable(false)
   next.setVisible(false)
   layers.add(next)
@@ -129,16 +127,11 @@ class StoryView(cutscene: (Journey, Scene) => Unit,
 
 }
 
-// FSM Panel which is in one of 4 states:
+// FSM Panel which is in one of 3 states:
 //
-// 0. request with instructions to recharge the device
+// 0. request with instructions to recharge.md the device
 // 1. summary introduction and username input
-// 2. displaying instructions for the EEG
-// 3. interactive calibration with visual feedback
-//
-// all stages have a timeout of 5 minutes, reverting to state 0.
-// State 0 will attempt to put the device into power saving mode
-// (i.e. ask someone to charge the device!)
+// 2. interactive calibration with visual feedback
 //
 // can't use scala.swing just yet https://issues.scala-lang.org/browse/SI-3933
 class IntroductionView(introduced: String => Unit) extends JPanel with JavaLogging with EmotivListener {
@@ -147,9 +140,8 @@ class IntroductionView(introduced: String => Unit) extends JPanel with JavaLoggi
   setLayout(cards)
   setFocusable(true)
 
-  val prompt = "Please let us know your name (or your email address) and press Enter."
-  val nameField = new JXTextField(prompt)
-  nameField.setColumns(42)
+  val prompt = "Please let us know your name and then press Enter:"
+  val nameField = (new TextField(42)).peer
   // https://issues.scala-lang.org/browse/SI-7307e
   nameField.addKeyListener(new KeyAdapter {
     override def keyPressed(e: KeyEvent) {
@@ -157,17 +149,19 @@ class IntroductionView(introduced: String => Unit) extends JPanel with JavaLoggi
     }
   })
 
-  val panel0 = new FlowPanel() {
-    contents += new Label("Request Recharge")
-  }.peer
-
   implicit def wrap(j: JComponent) = Component.wrap(j)
+
+  val panel0 = new BorderPanel() {
+    layout(new MarkdownPanel("recharge")) = Center
+  }.peer
 
   val panel1 = new BorderPanel() {
     layout(new MarkdownPanel("summary")) = Center
-    layout(new GridBagPanel {
-      layout(nameField) = new Constraints
-    }) = East
+    layout(new FlowPanel {
+      contents += new Label(prompt)
+      contents += nameField
+      contents += Swing.VStrut(400)
+    }) = South
   }.peer
 
   val calibration = new SensorQualityView
@@ -179,14 +173,10 @@ class IntroductionView(introduced: String => Unit) extends JPanel with JavaLoggi
     layout(feedback) = South
   }.peer
 
-  val panel3 = new FlowPanel() {
-    contents += new Label("Calibration")
-  }.peer
 
   add(panel0)
   add(panel1)
   add(panel2)
-  add(panel3)
 
   addKeyListener(new KeyAdapter {
     override def keyPressed(e: KeyEvent) {
@@ -204,11 +194,13 @@ class IntroductionView(introduced: String => Unit) extends JPanel with JavaLoggi
     if (current == panel1 && nameField.getText.isEmpty)
       return
 
-    if (current == panel3) {
+    if (current == panel2) {
       introduced(nameField.getText)
+      nameField.setText("")
     }
 
     cards.next(this)
+    nameField.requestFocus()
   }
 
   def previous() {
@@ -222,10 +214,8 @@ class IntroductionView(introduced: String => Unit) extends JPanel with JavaLoggi
       feedback.receivePacket(p)
     }
 
-    // TODO battery meter
-//    if (p.getBatteryLevel < 200) {
-//      cards.first(this)
-//    }
+    if (p.getBatteryLevel < 66)
+      cards.first(this)
   }
 
   def connectionBroken() {}
