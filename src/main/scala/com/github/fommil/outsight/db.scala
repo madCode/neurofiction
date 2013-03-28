@@ -6,11 +6,16 @@ import scala.collection.JavaConversions._
 import com.github.fommil.emokit.Packet.Sensor
 import scala.collection.immutable.TreeMap
 
+class Histogram(val data: Map[Long, Double])
+
+class Histograms(val data: Map[Sensor, Histogram])
+
 // this would probably be best implemented with JdbcTemplate
 // but I don't know how to get the DataSource from JPA
-class EmotivHistogramQuery(emf: EntityManagerFactory, min: Int = 0, max: Int = 20000, bins: Int = 100) {
+// 20,000 is higher than needed, the resolution is 14 bit = 16384
+class EmotivHistogramQuery(emf: EntityManagerFactory, min: Int = 0, max: Int = 20000, bins: Int = 1000) {
 
-  def histogramFor(session: EmotivSession, sensor: Sensor) = {
+  def histogramFor(session: EmotivSession, sensor: Sensor): Histogram = {
     val em = emf.createEntityManager()
     try {
       val query = em.createNativeQuery(
@@ -26,20 +31,26 @@ class EmotivHistogramQuery(emf: EntityManagerFactory, min: Int = 0, max: Int = 2
         .setParameter("min", min)
         .setParameter("max", max)
         .setParameter("bins", bins)
-      val results = query.getResultList.map{row =>
-        val e = row.asInstanceOf[Array[_]]
-        (e(0).asInstanceOf[Number].longValue(),
-          e(1).asInstanceOf[Number].longValue())
+      val results = query.getResultList.map {
+        row =>
+          val e = row.asInstanceOf[Array[_]]
+          (e(0).asInstanceOf[Number].longValue(),
+            e(1).asInstanceOf[Number].longValue())
       }
-      TreeMap(results:_*)
-    } finally {
-      em.close()
-    }
+      val total: Double = results.map(_._2).sum
+
+      new Histogram(TreeMap(results.map {
+        row =>
+          (min + (row._1 - 1) * (max / bins), row._2 / total)
+      }: _*
+      ))
+    } finally em.close()
   }
 
-  def histogramsFor(session: EmotivSession) = {
-    Sensor.values().filterNot(_ == Sensor.QUALITY).par.map{sensor =>
-      (sensor, histogramFor(session, sensor))
-    }.toMap
+  def histogramsFor(session: EmotivSession): Histograms = {
+    new Histograms(Sensor.values().filterNot(_ == Sensor.QUALITY).par.map {
+      sensor =>
+        (sensor, histogramFor(session, sensor))
+    }.toMap.seq)
   }
 }

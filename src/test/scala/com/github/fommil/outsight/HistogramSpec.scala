@@ -10,25 +10,33 @@ import com.github.fommil.emokit.Packet.Sensor
 
 class HistogramSpec extends Specification with JavaLogging {
 
+  val emf = CrudDao.createEntityManagerFactory("OutsightPU")
+  val analytics = new EmotivHistogramQuery(emf)
+
+
   "the native query" should {
+    "not die when no results are found" in {
+      val session = new EmotivSession
+      session.setId(UUID.randomUUID())
+
+      analytics.histogramsFor(session).data.size === (Sensor.values().length - 1)
+    }
+
     "return results for a known session" in {
       // select encode(session_id, 'hex')::uuid, count(*) From emotivdatum group by session_id;
-      val emf = CrudDao.createEntityManagerFactory("OutsightPU")
-      val analytics = new EmotivHistogramQuery(emf)
+
 
       val session = new EmotivSession
       session.setId(UUID.fromString("d5389f47-6600-4659-97a2-085c6ac9ace9"))
       val histogram = analytics.histogramFor(session, Sensor.AF3)
-
-      val start = System.currentTimeMillis()
       val histograms = analytics.histogramsFor(session)
-      val end = System.currentTimeMillis()
-      log.info(histograms.toString)
-      log.info(s"took ${end - start}")
 
-      // if we got here without I/O problems, it's probably all good
+      // if we got here without I/O and cast problems, it's probably all good
       success
+    }
 
+    "comparing known sessions gives sensible results" in {
+      todo
     }
   }
 }

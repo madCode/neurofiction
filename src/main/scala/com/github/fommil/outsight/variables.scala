@@ -2,6 +2,7 @@ package com.github.fommil.outsight
 
 import com.github.fommil.emokit.jpa.EmotivSession
 import scala.util.Random
+import com.github.fommil.emokit.Packet.Sensor
 
 
 /** For calculating transitions between `Scene`s, and may be shown to the audience. */
@@ -28,13 +29,22 @@ case class EmotivHistVariable(similar: Scene) extends Variable
 // most similar previous Scene for a sample Scene.
 case class EmotivHistExtractor(restriction: Seq[Scene]) extends VariableExtractor {
 
-  type Histogram = Map[Int, Double]
+  protected def classify(data: Array[Histograms], sample: Histograms): Histograms = {
+    data(new Random().nextInt(data.length))
+  }
 
-  protected def classify(data: List[Histogram], sample: Histogram): Histogram = ???
 
-  def variables(journey: Journey) = {
-    // DUMMY
-    val random = restriction(new Random().nextInt(restriction.length))
-    EmotivHistVariable(random) :: Nil
+  def variables(journey: Journey): List[Variable] = {
+    val (labelled, unlabelled) = journey.history.partition(h => restriction.contains(h.scene))
+    if (labelled.isEmpty || unlabelled.isEmpty) return Nil
+
+    // this is so bad... accessing global variables...
+    val analytics = new EmotivHistogramQuery(Main.emf)
+    val data = labelled.map{h => (h.scene, analytics.histogramsFor(h.responseT[EmotivResponse].head.session))}.toMap
+    val sample = analytics.histogramsFor(unlabelled.head.responseT[EmotivResponse].head.session)
+
+    val classified = classify(data.values.toArray, sample)
+
+    EmotivHistVariable(data.find(_._2 == classified).get._1) :: Nil
   }
 }

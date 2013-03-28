@@ -19,7 +19,12 @@ case class Scene(resource: String) extends ResourceSupport with MarkdownSupport 
 
 object Fin extends Scene("Fin")
 
-case class ObservedScene(scene: Scene, responses: Seq[Response])
+case class ObservedScene(scene: Scene, responses: Seq[Response]) {
+
+  def responseT[T] = responses.collect {
+    case r: T => r
+  }
+}
 
 trait Response
 

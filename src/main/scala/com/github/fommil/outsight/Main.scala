@@ -60,9 +60,7 @@ object Main extends App with JavaLogging {
   def back(journey: Journey, variables: Seq[Variable]) {
     journey.history match {
       case x :: xs =>
-        val last = x.responses.collect {
-          case r: EmotivResponse => r
-        }.head
+        val last = x.responseT[EmotivResponse].head
         db.setSession(last.session)
         // we retain the current variables, which could result
         // in temporal weirdness for some stories.
