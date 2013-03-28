@@ -33,8 +33,7 @@ object Main extends App with JavaLogging {
 
   def introduce() {
     db.setRecording(false)
-    view.setFocusable(false) // otherwise TAB can select the view... weird
-    intro.setFocusable(true)
+    intro.reset()
     frame.setCentre(intro)
     intro.next()
   }
@@ -45,8 +44,6 @@ object Main extends App with JavaLogging {
     view.setModel(Journey(), rules.start)
     db.setSession(new EmotivSession)
     db.setRecording(true)
-    intro.setFocusable(false)
-    view.setFocusable(true)
     frame.setCentre(view)
   }
 

@@ -10,10 +10,9 @@ import org.w3c.dom.Document
 import java.awt.{CardLayout, BorderLayout, Point, Rectangle}
 import scala.swing.Component
 import scala.swing.Label
-import org.jdesktop.swingx.JXTextField
 import com.github.fommil.emokit.{Packet, EmotivListener}
 import BorderPanel.Position._
-import com.github.fommil.emokit.gui.{BatteryView, SensorView, SensorQualityView}
+import com.github.fommil.emokit.gui.{SensorView, SensorQualityView}
 
 // I'm not proud of this file... @fommil
 
@@ -22,6 +21,9 @@ class OutsightFrame extends JFrame("Insight / Outsight") {
   setLayout(new BorderLayout)
 
   def setCentre(pane: JPanel) {
+    // if we don't turn focusing, TAB can focus a ghost window...
+    if (getComponentCount > 0) getComponent(0).setFocusable(false)
+    pane.setFocusable(true)
     add(pane, BorderLayout.CENTER)
     revalidate()
     pane.requestFocus()
@@ -38,7 +40,6 @@ class StoryView(cutscene: (Journey, Scene) => Unit,
 
   private val layers = new JLayeredPane
   add(layers, BorderLayout.CENTER)
-  setFocusable(true)
 
   private val xhtml = new XHTMLPanel
   private val scroll = new JScrollPane(xhtml)
@@ -129,20 +130,24 @@ class StoryView(cutscene: (Journey, Scene) => Unit,
 
 // FSM Panel which is in one of 3 states:
 //
-// 0. request with instructions to recharge.md the device
-// 1. summary introduction and username input
-// 2. interactive calibration with visual feedback
+// * request with instructions to recharge.md the device
+// * summary introduction and username input
+// * interactive calibration with visual feedback
 //
 // can't use scala.swing just yet https://issues.scala-lang.org/browse/SI-3933
+// a really nice CardPane with focus control and sensible next/previous would
+// *really* clean up this class.
 class IntroductionView(introduced: String => Unit) extends JPanel with JavaLogging with EmotivListener {
 
   val cards = new CardLayout
   setLayout(cards)
-  setFocusable(true)
 
+  // we always want nameField to acquire Focus if it is displayed,
+  // but there doesn't appear to be a way to do this without manual
+  // delegation at all parts of the focus tree, and on card changes.
   val prompt = "Please let us know your name and then press Enter:"
   val nameField = (new TextField(42)).peer
-  // https://issues.scala-lang.org/browse/SI-7307e
+  // https://issues.scala-lang.org/browse/SI-7307
   nameField.addKeyListener(new KeyAdapter {
     override def keyPressed(e: KeyEvent) {
       if (e.getKeyCode == KeyEvent.VK_ENTER) next()
@@ -151,11 +156,15 @@ class IntroductionView(introduced: String => Unit) extends JPanel with JavaLoggi
 
   implicit def wrap(j: JComponent) = Component.wrap(j)
 
-  val panel0 = new BorderPanel() {
+  val panel3 = new BorderPanel() {
     layout(new MarkdownPanel("recharge")) = Center
   }.peer
 
   val panel1 = new BorderPanel() {
+    // https://issues.scala-lang.org/browse/SI-7309
+    //    reactions += {
+    //      case e: FocusGained => nameField.requestFocus()
+    //    }
     layout(new MarkdownPanel("summary")) = Center
     layout(new FlowPanel {
       contents += new Label(prompt)
@@ -163,6 +172,11 @@ class IntroductionView(introduced: String => Unit) extends JPanel with JavaLoggi
       contents += Swing.VStrut(400)
     }) = South
   }.peer
+  panel1.addFocusListener(new FocusAdapter {
+    override def focusGained(e: FocusEvent) {
+      nameField.requestFocus()
+    }
+  })
 
   val calibration = new SensorQualityView
   val feedback = new SensorView
@@ -174,9 +188,9 @@ class IntroductionView(introduced: String => Unit) extends JPanel with JavaLoggi
   }.peer
 
 
-  add(panel0)
   add(panel1)
   add(panel2)
+  add(panel3)
 
   addKeyListener(new KeyAdapter {
     override def keyPressed(e: KeyEvent) {
@@ -191,21 +205,22 @@ class IntroductionView(introduced: String => Unit) extends JPanel with JavaLoggi
   def current = getComponents.filter(_.isVisible).head
 
   def next() {
-    if (current == panel1 && nameField.getText.isEmpty)
-      return
-
-    if (current == panel2) {
-      introduced(nameField.getText)
-      nameField.setText("")
-    }
+    if (current == panel1 && nameField.getText.isEmpty) return
+    if (current == panel2) introduced(nameField.getText)
 
     cards.next(this)
-    nameField.requestFocus()
+    current.requestFocus()
   }
 
   def previous() {
-    if (current != panel0 && current != panel1)
-      cards.previous(this)
+    if (current != panel3 && current != panel1) cards.previous(this)
+    current.requestFocus()
+  }
+
+  def reset() {
+    nameField.setText("")
+    cards.first(this)
+    current.requestFocus()
   }
 
   def receivePacket(p: Packet) {
@@ -214,12 +229,16 @@ class IntroductionView(introduced: String => Unit) extends JPanel with JavaLoggi
       feedback.receivePacket(p)
     }
 
-    if (p.getBatteryLevel < 66)
-      cards.first(this)
+    if (p.getBatteryLevel < 66) cards.first(this)
   }
 
   def connectionBroken() {}
 
+  addFocusListener(new FocusAdapter {
+    override def focusGained(e: FocusEvent) {
+      current.requestFocus()
+    }
+  })
 }
 
 class MarkdownPanel(val resource: String) extends XHTMLPanel with ResourceSupport with MarkdownSupport with XmlSupport {
