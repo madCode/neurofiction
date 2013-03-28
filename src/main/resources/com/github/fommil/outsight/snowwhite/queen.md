@@ -6,7 +6,7 @@ As she wakes up, the thought brings warm joy that spreads through her limbs like
 
 She walks through the house naked, glorying in the morning light on her flawless skin. In a few hours, it will all belong to her: the clean lines of the designer furniture, the calm of the frozen pier and the beach sauna, all the little symbols of power.  
 
-She makes herself a coffee, sits on the couch, cradles the hot cup against your bare belly, and turn on the TV. 
+She makes herself a coffee, sits on the couch, cradles the hot cup against her bare belly, and turns on the TV. 
 
 She does not really watch it, though. She can already see what it will show tomorrow. The shattered glass, the black ice, the blood. The dark Sedan that came out of nowhere, crushing the minister's car on the driver's side. 
 
