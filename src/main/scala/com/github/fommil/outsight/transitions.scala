@@ -38,8 +38,12 @@ class SnowWhiteRules extends Rules {
         val seen = journey.history.map(_.scene)
         val available = dynamic.filterNot(seen.contains _)
 
-        if (available.isEmpty) scene("ending-death")
-        else available(new Random().nextInt(available.length))
+        if (available.isEmpty) {
+          variables.head match {
+            case EmotivHistVariable(like) if like == endings(0) => scene("ending-life")
+            case _ => scene("ending-death")
+          }
+        } else available(new Random().nextInt(available.length))
 
       case "ending-death" => Fin
       case "ending-life" => Fin
