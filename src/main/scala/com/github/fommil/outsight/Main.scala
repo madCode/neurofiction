@@ -18,6 +18,7 @@ object Main extends App with JavaLogging {
   val rules = new SnowWhiteRules
 
   val emf = CrudDao.createEntityManagerFactory("OutsightPU")
+
   val db = new EmotivJpaController(emf)
 
   val intro = new IntroductionView(introduced)
