@@ -21,8 +21,12 @@ class OutsightFrame extends JFrame("Insight / Outsight") {
   setLayout(new BorderLayout)
 
   def setCentre(pane: JPanel) {
-    // if we don't turn focusing, TAB can focus a ghost window...
-    if (getComponentCount > 0) getComponent(0).setFocusable(false)
+    getContentPane.getComponents.foreach{c=>
+      c.setVisible(false)
+      c.setFocusable(false)
+    }
+
+    pane.setVisible(true)
     pane.setFocusable(true)
     add(pane, BorderLayout.CENTER)
     revalidate()
@@ -209,34 +213,34 @@ class IntroductionView(introduced: String => Unit) extends JPanel with JavaLoggi
     if (current == panel2) introduced(nameField.getText)
 
     cards.next(this)
-    current.requestFocus()
+    if (current == panel1) panel1.requestFocus()
   }
 
   def previous() {
     if (current != panel3 && current != panel1) cards.previous(this)
-    current.requestFocus()
+    if (current == panel1) panel1.requestFocus()
   }
 
   def reset() {
     nameField.setText("")
     cards.first(this)
-    current.requestFocus()
+    panel1.requestFocus()
   }
 
   def receivePacket(p: Packet) {
-    if (current == panel2) {
-      calibration.receivePacket(p)
-      feedback.receivePacket(p)
-    }
+    if (!isVisible) return
 
-    if (p.getBatteryLevel < 66) cards.first(this)
+    calibration.receivePacket(p)
+    feedback.receivePacket(p)
+
+    if (p.getBatteryLevel > 0 && p.getBatteryLevel < 66) cards.last(this)
   }
 
   def connectionBroken() {}
 
   addFocusListener(new FocusAdapter {
     override def focusGained(e: FocusEvent) {
-      current.requestFocus()
+      if (current == panel1) panel1.requestFocus()
     }
   })
 }

@@ -43,7 +43,7 @@ object Main extends App with JavaLogging {
     this.subject = subject
     this.sitting = UUID.randomUUID()
     view.setModel(Journey(), rules.start)
-    db.setSession(new EmotivSession)
+    db.createSession(new EmotivSession)
     db.setRecording(true)
     frame.setCentre(view)
   }

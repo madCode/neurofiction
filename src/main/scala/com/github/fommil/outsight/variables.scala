@@ -29,8 +29,8 @@ case class EmotivHistVariable(similar: Scene) extends Variable
 // most similar previous Scene for a sample Scene.
 case class EmotivHistExtractor(restriction: Seq[Scene]) extends VariableExtractor {
 
-  protected def classify(data: Array[Histograms], sample: Histograms): Histograms = {
-    data(new Random().nextInt(data.length))
+  protected def classify(data: Map[Scene, Histograms], sample: Histograms): Scene = {
+    data.toList(new Random().nextInt(data.size))._1
   }
 
 
@@ -43,8 +43,8 @@ case class EmotivHistExtractor(restriction: Seq[Scene]) extends VariableExtracto
     val data = labelled.map{h => (h.scene, analytics.histogramsFor(h.responseT[EmotivResponse].head.session))}.toMap
     val sample = analytics.histogramsFor(unlabelled.head.responseT[EmotivResponse].head.session)
 
-    val classified = classify(data.values.toArray, sample)
+    val classified = classify(data, sample)
 
-    EmotivHistVariable(data.find(_._2 == classified).get._1) :: Nil
+    EmotivHistVariable(classified) :: Nil
   }
 }
