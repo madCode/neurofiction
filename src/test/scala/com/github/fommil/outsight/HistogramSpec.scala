@@ -14,15 +14,20 @@ class HistogramSpec extends Specification with JavaLogging {
     "return results for a known session" in {
       // select encode(session_id, 'hex')::uuid, count(*) From emotivdatum group by session_id;
       val emf = CrudDao.createEntityManagerFactory("OutsightPU")
-      val histograms = new EmotivHistogramQuery(emf)
+      val analytics = new EmotivHistogramQuery(emf)
 
       val session = new EmotivSession
       session.setId(UUID.fromString("d5389f47-6600-4659-97a2-085c6ac9ace9"))
-      val histogram = histograms.histogramFor(session, Sensor.AF3)
+      val histogram = analytics.histogramFor(session, Sensor.AF3)
 
-      histogram.foreach {each=>
-        println(each)
-      }
+      val start = System.currentTimeMillis()
+      val histograms = analytics.histogramsFor(session)
+      val end = System.currentTimeMillis()
+      log.info(histograms.toString)
+      log.info(s"took ${end - start}")
+
+      // if we got here without I/O problems, it's probably all good
+      success
 
     }
   }
