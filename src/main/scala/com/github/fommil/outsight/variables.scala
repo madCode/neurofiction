@@ -30,7 +30,9 @@ case class EmotivHistVariable(similar: Scene) extends Variable
 case class EmotivHistExtractor(restriction: Seq[Scene]) extends VariableExtractor {
 
   protected def classify(data: Map[Scene, Histograms], sample: Histograms): Scene = {
-    data.toList(new Random().nextInt(data.size))._1
+    data.toList.map{c=>
+      (c._1, sample.distanceTo(c._2))
+    }.sortWith((a, b) => a._2 > b._2).head._1
   }
 
 

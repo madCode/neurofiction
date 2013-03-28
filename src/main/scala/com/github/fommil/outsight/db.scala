@@ -6,9 +6,27 @@ import scala.collection.JavaConversions._
 import com.github.fommil.emokit.Packet.Sensor
 import scala.collection.immutable.TreeMap
 
-class Histogram(val data: Map[Long, Double])
+class Histogram(val data: Map[Long, Double]) {
 
-class Histograms(val data: Map[Sensor, Histogram])
+  // http://jccaicedo.blogspot.co.uk/2012/01/histogram-intersection.html
+  def intersection(other: Histogram) = {
+    val bins = (data.keys ++ other.data.keys).toSet
+    bins.map{bin=>
+      freq(bin).min(other.freq(bin))
+    }.sum
+  }
+
+  def freq(bin: Long) = data.getOrElse(bin, 0.0)
+}
+
+class Histograms(val data: Map[Sensor, Histogram]) {
+
+  def distanceTo(other: Histograms) = {
+    data.map {e=>
+      math.pow(e._2.intersection(other.data.get(e._1).get), 2)
+    }.sum
+  }
+}
 
 // this would probably be best implemented with JdbcTemplate
 // but I don't know how to get the DataSource from JPA
