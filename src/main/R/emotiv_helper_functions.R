@@ -64,6 +64,7 @@ loadEmotivSession <- function(session.name,database.name = "zoku"){
   # A list of data frames containing the data with session IDs; just a data frame if the session ID is unique. 
   # Note that for the sensors, the data is converted into time series data. 
   
+  show(session.name)
   
   # Load libraries. 
   require(DBI) # R relational database interfaces. 
@@ -91,7 +92,7 @@ loadEmotivSession <- function(session.name,database.name = "zoku"){
   for (id in session.ids){
     # FIXME correct use of quotes below? 
     session.data <- dbGetQuery(con, paste("select * from emotivdatum where session_id = ","'",id,"'",sep=""))
-	
+  #show(length(session.data))	
 	# For convenience, let's also make a new time vector 
 	session.data <- convertEmotivSessionToTs(session.data)
 	
@@ -110,6 +111,43 @@ loadEmotivSession <- function(session.name,database.name = "zoku"){
   # TODO add a time vector generator so plotting becomes easier... 
  dbDisconnect(con)
   
+  return(session.results)
+  
+}
+
+
+loadEmotivSessionIDs <- function(session.ids,database.name = "outsight"){
+  # Loads an Emotiv EPOC session recorded with emokit-java based on session IDs. 
+  # Args: 
+  #   session.ids: A vector of session IDs. 
+  #   database.name: The PostgreSQL database name. Defaults to zoku but included as parameter for future use. 
+  # Returns: 
+  # A list of data frames containing the data with session IDs; just a data frame if the session ID is unique. 
+  # Note that for the sensors, the data is converted into time series data. 
+  
+  # Load libraries. 
+  require(DBI) # R relational database interfaces. 
+  require(RPostgreSQL) # emokit-java uses PostgreSQL. 
+  
+  # Load database driver and open a connection. 
+  drv <- dbDriver("PostgreSQL")
+  con <- dbConnect(drv,dbname=database.name,user="postgres")  
+  
+  # Create an empty list to hold the query results. 
+  session.results <- list()
+  
+  # Clumsy index variable to iterate through the session ids and add them to the list. 
+  i = 1
+  for (id in session.ids){
+    session.data <- dbGetQuery(con, paste("select * from emotivdatum where session_id = ","'",id,"'",sep=""))
+    # Convert to a time series object for convenience. 
+    session.data <- convertEmotivSessionToTs(session.data)
+    session.results[[i]] <- session.data
+    i <- i+1 
+  }
+   
+  dbDisconnect(con)
+
   return(session.results)
   
 }
@@ -397,7 +435,10 @@ convertEmotivSessionToTs <- function(eeg.data){
   sensors <- c("af3","af4","f3","f4","f7","f8","fc5","fc6","o1","o2","p7","p8","t7","t8","gyrox","gyroy")
   
   for (sensor in sensors){
+  #if (length(eeg.data[[sensor]]) > 0){
     eeg.data[[sensor]] <- ts(eeg.data[[sensor]],frequency=128)
+  #}
+      
   }
   return(eeg.data)
   
