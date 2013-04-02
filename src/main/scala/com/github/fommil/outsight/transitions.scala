@@ -15,7 +15,7 @@ trait Rules {
 }
 
 
-case class SnowWhiteRules extends Rules with JavaLogging {
+case class SnowWhiteRules() extends Rules with JavaLogging {
 
   private def scene(name: String) = Scene(s"classpath:com/github/fommil/outsight/snowwhite/$name.md")
 
