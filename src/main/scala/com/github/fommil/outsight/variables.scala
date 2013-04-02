@@ -3,6 +3,7 @@ package com.github.fommil.outsight
 import com.github.fommil.emokit.jpa.EmotivSession
 import scala.util.Random
 import com.github.fommil.emokit.Packet.Sensor
+import akka.contrib.jul.JavaLogging
 
 
 /** For calculating transitions between `Scene`s, and may be shown to the audience. */
@@ -27,14 +28,12 @@ case class EmotivHistVariable(similar: Scene) extends Variable
 
 // a machine learning classifier that finds the
 // most similar previous Scene for a sample Scene.
-case class EmotivHistExtractor(restriction: Seq[Scene]) extends VariableExtractor {
+case class EmotivHistExtractor(restriction: Seq[Scene]) extends VariableExtractor with JavaLogging {
 
-  protected def classify(data: Map[Scene, Histograms], sample: Histograms): Scene = {
-    data.toList(new Random().nextInt(data.size))._1
-//    data.toList.map{c=>
-//      (c._1, sample.distanceTo(c._2))
-//    }.sortWith((a, b) => a._2 > b._2).head._1
-  }
+  protected def classify(data: Map[Scene, Histograms], sample: Histograms): Scene =
+    data.toList.map{c=>
+      (c._1, sample.distanceTo(c._2))
+    }.sortWith((a, b) => a._2 > b._2).head._1
 
 
   def variables(journey: Journey): List[Variable] = {

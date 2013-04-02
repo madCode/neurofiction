@@ -39,10 +39,10 @@ class SnowWhiteRules extends Rules {
         val available = dynamic.filterNot(seen.contains _)
 
         if (available.isEmpty) {
-          variables.head match {
+          variables.collect {
             case EmotivHistVariable(like) if like == endings(0) => scene("ending-life")
-            case _ => scene("ending-death")
-          }
+            case EmotivHistVariable(like) if like == endings(1) => scene("ending-death")
+          }.head
         } else available(new Random().nextInt(available.length))
 
       case "ending-death" => Fin
