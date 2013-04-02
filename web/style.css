@@ -1,5 +1,6 @@
 body {
-	font-family: Palatino;
+	/*font-family: Palatino;*/
+	font-family: Consolas, Monospace;
 	margin: 250px 1000px 600px 200px;
 	background-image: url("nodes.jpg");
 	background-repeat: repeat-y;
@@ -7,13 +8,15 @@ body {
 	font-size: large;
 }
 p {text-align:justify;}
-a:link {color: rgb(254,138,0); text-decoration: underline; }
-a:active {color: rgb(252,62,4); text-decoration: underline; }
-a:visited {color: #000000; text-decoration: underline; }
-a:hover {color: rgb(253,101,0); text-decoration: none; }
+
+a:link {color: rgb(254,138,0);}
+a:active {color: rgb(252,62,4);}
+a:visited {color: #000000; font-weight: bold;}
+a:hover {color: rgb(253,101,0);}
 a.twitter {
 	font-family: Consolas, Monospace;
 }
+
 #intro {
 }
 #main {
@@ -22,4 +25,9 @@ a.twitter {
 	position: fixed;
 	bottom: -10px;
 	right: 0;
+}
+#copyright {
+	clear: both;
+	font-size: small;
+	padding-top: 10em;
 }
