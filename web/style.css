@@ -13,14 +13,22 @@ a:active {color: rgb(252,62,4);}
 a:visited {color: #000000; font-weight: bold;}
 a:hover {color: rgb(253,101,0);}
 
+.figures {
+	text-align: center;
+}
+
 #intro {
 }
 #main {
+	padding-top: 2em;
+	padding-bottom: 2em;
 }
 #heads {
 	position: fixed;
 	bottom: -10px;
 	right: 0;
+}
+#bios {
 }
 #copyright {
 	clear: both;

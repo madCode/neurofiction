@@ -5,7 +5,7 @@
     <head>
         <link href="style.css" rel="stylesheet" type="text/css"/>
         <title>
-            ReadYou: NeuroFiction
+            Neurofiction
         </title>
         <script>
           (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -15,14 +15,15 @@
           ga('create', 'UA-6330807-7', 'neurofiction.net');
           ga('send', 'pageview');
         </script>
+        <script src='https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js?lang=scala' type='text/javascript'></script>
     </head>
     <body>
     <div id="intro">
         <h1>
-            <a class="twitter" href="https://twitter.com/search/realtime?q=neurofiction">#neurofiction</a>
+            <a class="twitter" href="https://twitter.com/search/realtime?q=neurofic">#neurofic</a>
         </h1>
         <p>
-        <a href="http://www.linkedin.com/in/hannur">Hannu Rajaniemi</a>
+        <a href="http://en.wikipedia.org/wiki/Hannu_Rajaniemi">Hannu Rajaniemi</a>
         <a class="twitter" href="https://twitter.com/hannu">{@hannu}</a>
         and
         <a href="http://www.linkedin.com/in/samhalliday">Samuel Halliday</a>
@@ -30,13 +31,49 @@
         </p>
     </div>
     <div id="main">
-        <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur varius lacus blandit ante dapibus faucibus. Fusce pharetra felis a est gravida fringilla. Duis vitae sapien orci, at interdum libero. Ut sed ornare libero. Vivamus eu augue eu tortor gravida interdum. In pulvinar est vel magna egestas cursus. Aenean quam enim, faucibus at adipiscing molestie, adipiscing at eros. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nam dictum consectetur ipsum vel pharetra. Sed ac leo arcu, eget accumsan massa. In vestibulum fringilla dui a convallis. Suspendisse eu nunc non sem rutrum semper ut et ligula. Aenean convallis suscipit dui et feugiat.
-        </p><p>
-            Quisque sodales risus a lorem rhoncus ac laoreet arcu ornare. Cras eget est tellus. Sed et tristique nunc. Sed vel ipsum sed lorem pellentesque congue quis quis lectus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec iaculis tellus ac nunc dictum ut suscipit felis consequat. Proin gravida accumsan ipsum, sed condimentum purus faucibus at. Cras quis ligula et ipsum cursus eleifend vitae laoreet metus. Cras in orci sit amet sem lobortis faucibus nec eu urna. Nunc cursus semper mauris, a posuere nulla consectetur et. Morbi accumsan nisl ut mi gravida lacinia. Nullam vehicula erat id lacus luctus at iaculis nibh tempor. Nam vel tincidunt neque.
-        </p><p>
-            Suspendisse venenatis leo semper justo sagittis id pharetra lectus auctor. Mauris euismod pulvinar adipiscing. Mauris in tempus magna. Proin rhoncus mi sed magna ultricies malesuada elementum massa aliquet. Praesent scelerisque pellentesque magna, sed interdum nisl accumsan id. Curabitur id justo metus, quis pretium nisl. Vivamus rhoncus mauris ac quam posuere aliquet id id nulla.
-        </p>
+        <p>What if a book could read you? </p>
+
+        <p><strong>Neurofiction</strong> is a new kind of literary experience, created with the support of <a href="http://www.mediascot.org/alt-w">New Media Scotland</a>. Neurofiction combines:</p>
+
+        <ul>
+        <li><a href="http://www.emotiv.com">off-the-shelf hardware</a></li>
+        <li>machine learning</li>
+        <li>and customised prose.</li>
+        </ul>
+
+        <p>Together, these enable stories that change themselves in response to the reader's brain activity. </p>
+
+        <p>Each reader, each act of reading, is unique: books speak to our individual memories, associations and experiences. Reading is a two-way process, a delicate tango between the reading brain and the text. </p>
+
+        <p>In neurofiction, the story’s effect on the reader’s brain – electrical activity of their neurons – is captured using an <a href="http://en.wikipedia.org/wiki/Electroencephalography">electroencephalography</a> headset. Using an algorithm that learns what themes and elements engage each reader, our neurofiction engine turns this data into a unique path through the story. The reader can be guided to one of multiple possible endings or allowed to explore a new region of the story space. </p>
+
+        <p>Note that neurofiction is <em>not</em> interactive fiction: the reader experiences the story as linear, calm and immersive, as if reading a book. But by opening themselves to be read, neurofiction readers become subconscious collaborators in the creation of a new narrative. </p>
+
+        <p>Our first fully realised neurofiction piece is <em>Snow White is Dead</em>. Recently showcased at the <a href="http://www.sciencefestival.co.uk/whats-on/latelab/programme">Edinburgh Science Festival</a>, it is a modern retelling of the classic fairy tale that leaves the fate of the raven-haired princess in the hands - or the brain - of the reader. Is the apple green or red? Is Snow White alive or dead?</p>
+
+    <div class="figures">
+        <img src="green-red.jpg" alt="green and red apple"/>
+        <img src="transitions.png" alt="transition probabilities for Snow White"/>
+    </div>
+
+        <p>One outcome of this work was <a href="https://github.com/fommil/emokit-java">emokit</a>, which we have open-sourced to encourage innovation. Our neurofiction engine plugs in to emokit, and has a Scala story module that will eventually make it easy for neurofiction developers and authors to tell their stories.</p>
+
+<!--prettify lang="scala"-->
+<pre><code>
+  journey.head match {
+    case scene if dynamic(journey) =&gt; reader.explore(scenes)
+    case scene =&gt; reader.choose(life, death)
+  }
+</code></pre>
+
+        <p>Neurofiction is more than just a new storytelling medium: it is an initial foray into the design space that emerging brain-computer interface technologies are creating. In the future, the boundary between our minds and our technologies will blur. We will become our books. Or perhaps they will become us... </p>
+
+        <p>To find out more, follow <a class="twitter" href="https://twitter.com/search/realtime?q=neurofic">#neurofic</a>.</p>
+    </div>
+    <div id="bios">
+        <p><a href="http://en.wikipedia.org/wiki/Hannu_Rajaniemi">Hannu Rajaniemi</a> is the author of the science fiction novels The Quantum Thief and The Fractal Prince, and several short stories. </p>
+
+        <p><a href="uk.linkedin.com/in/samhalliday/">Samuel Halliday</a> is an accomplished researcher, developer, architect, data scientist and project leader.</p>
     </div>
     <div id="heads">
         <img src="heads.png" alt="floating heads">
@@ -45,6 +82,7 @@
         <a href="http://www.emotiv.com/about/media/">Downloadable Media</a> &copy; 2013 Emotiv<br/>
         <a href="http://www.complexification.net/gallery/machines/nodeGarden/">e0000</a> &copy; 2004 Jared Tarbell<br/>
         <a href="http://blog.redtray.co.uk/tag/brain-rules/">Brain Machine Head</a> &copy; 2011 Retray Solutions<br/>
+        <a href="http://www.flickr.com/photos/michellerocks/5023244779/">Green-red</a> &copy; 2010 michellerocks<br/>
         All other content &copy; 2012 - 2013 Hannu Rajaniemi and Samuel Halliday        
     </div>
     </body>
