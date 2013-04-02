@@ -1,0 +1,25 @@
+body {
+	font-family: Palatino;
+	margin: 250px 1000px 600px 200px;
+	background-image: url("nodes.jpg");
+	background-repeat: repeat-y;
+	background-position: right top;
+	font-size: large;
+}
+p {text-align:justify;}
+a:link {color: #000000; text-decoration: underline; }
+a:active {color: #0000ff; text-decoration: underline; }
+a:visited {color: #008000; text-decoration: underline; }
+a:hover {color: #ff0000; text-decoration: none; }
+a.twitter {
+	font-family: Consolas, Monospace;
+}
+#intro {
+}
+#main {
+}
+#heads {
+	position: fixed;
+	bottom: -10px;
+	right: 0;
+}
