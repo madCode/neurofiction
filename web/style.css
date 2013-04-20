@@ -2,7 +2,7 @@ html {
 	width: 100%;
 }
 body {
-	font-family: Consolas, Monospace;
+	font-family: Inconsolata, Consolas, sans-serif;
 	margin: 10% 50% 20% 10%;
 	background-image: url("nodes.jpg");
 	background-repeat: repeat-y;

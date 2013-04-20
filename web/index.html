@@ -3,6 +3,7 @@
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
+        <link href='http://fonts.googleapis.com/css?family=Inconsolata' rel='stylesheet' type='text/css'>
         <link href="style.css" rel="stylesheet" type="text/css"/>
         <title>
             Neurofiction
@@ -49,31 +50,31 @@
 
         <p>Note that neurofiction is <em>not</em> interactive fiction: the reader experiences the story as linear, calm and immersive, as if reading a book. But by opening themselves to be read, neurofiction readers become subconscious collaborators in the creation of a new narrative. </p>
 
-        <p>Our first fully realised neurofiction piece is <em>Snow White is Dead</em>. Recently showcased at the <a href="http://www.sciencefestival.co.uk/whats-on/latelab/programme">Edinburgh Science Festival</a>, it is a modern retelling of the classic fairy tale that leaves the fate of the raven-haired princess in the hands - or the brain - of the reader. Is the apple green or red? Is Snow White alive or dead?</p>
+        <p>Our first fully realised neurofiction piece is <em>Snow White is Dead</em>, recently showcased at the <a href="http://www.sciencefestival.co.uk/whats-on/latelab/programme">Edinburgh Science Festival</a> (see <a href="https://www.facebook.com/media/set/?set=a.10200607739251853.1073741825.1110764944&type=1">this photo gallery</a> for some readers in action). It is a modern retelling of the classic fairy tale that leaves the fate of the raven-haired princess in the hands - or the brain - of the reader. Is the apple green or red? Is Snow White alive or dead?</p>
 
     <div class="figures">
         <img src="green-red.jpg" alt="green and red apple"/>
-        <img src="transitions.png" alt="transition probabilities for Snow White"/>
+        <!-- <img src="transitions.png" alt="transition probabilities for Snow White"/> -->
     </div>
 
         <p>One outcome of this work was <a href="https://github.com/fommil/emokit-java">emokit</a>, which we have open-sourced to encourage innovation. Our neurofiction engine plugs in to emokit, and has a Scala story module that will eventually make it easy for neurofiction developers and authors to tell their stories.</p>
 
 <!--prettify lang="scala"-->
-<pre><code>
+<!-- <pre><code>
   journey.head match {
     case scene if dynamic(journey) =&gt; reader.explore(scenes)
     case scene =&gt; reader.choose(life, death)
   }
-</code></pre>
+</code></pre> -->
 
         <p>Neurofiction is more than just a new storytelling medium: it is an initial foray into the design space that emerging brain-computer interface technologies are creating. In the future, the boundary between our minds and our technologies will blur. We will become our books. Or perhaps they will become us... </p>
 
-        <p>To find out more, follow <a class="twitter" href="https://twitter.com/search/realtime?q=neurofic">#neurofic</a>.</p>
+        <p>To find out more, follow <a class="twitter" href="https://twitter.com/search?q=neurofic">#neurofic</a>.</p>
     </div>
     <div id="bios">
-        <p><a href="http://en.wikipedia.org/wiki/Hannu_Rajaniemi">Hannu Rajaniemi</a> is the author of the science fiction novels The Quantum Thief and The Fractal Prince, and several short stories. </p>
+        <p><a href="http://en.wikipedia.org/wiki/Hannu_Rajaniemi">Hannu Rajaniemi</a> is the author of the science fiction novels <a href="http://www.amazon.co.uk/Quantum-Thief-Hannu-Rajaniemi/dp/0575088893">The Quantum Thief</a> and <a href="http://www.amazon.co.uk/The-Fractal-Prince-Hannu-Rajaniemi/dp/0575088923/ref=pd_sim_b_1">The Fractal Prince</a>, and several short stories. </p>
 
-        <p><a href="http://www.linkedin.com/in/samhalliday">Samuel Halliday</a> is an accomplished researcher, developer, architect, data scientist and project leader.</p>
+        <p><a href="http://www.linkedin.com/in/samhalliday">Samuel Halliday</a> is a chartered mathematician, software engineer and leader: a data scientist.</p>
     </div>
     <div id="heads">
         <img src="heads.png" alt="floating heads">
