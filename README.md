@@ -5,7 +5,7 @@ Neurofiction
 
 This is the open-source project behind the first proof of concept story by Hannu Rajaniemi: "Snow White is Dead".
 
-The software is written in Scala by Sam Halliday and requires an [Emotiv EPOC headset](https://github.com/fommil/emokit-java) (approximately [$300](http://www.emotiv.com/store/hardware/epoc-bci/epoc-neuroheadset/)).
+The software is written in Scala by Sam Halliday and requires a [supported headset](https://github.com/fommil/emokit-java) (e.g. an Emotiv EPOC is approximately [$300](http://www.emotiv.com/store/hardware/epoc-bci/epoc-neuroheadset/)).
 
 To keep up-to-date, follow [`#neurofic`](https://twitter.com/search?q=neurofic).
 
