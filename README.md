@@ -16,9 +16,9 @@ This software has been optimised to run on an iMac monitor screen and may render
 
 * A [PostgreSQL database](http://www.postgresql.org) must be available on `localhost:5432/outsight`. Edit `persistence.xml` to point somewhere else, or to use a different relational database.
 * Clone this repository
-* type `sbt run`.
+* type `sbt run` (obviously, you must have [sbt](http://www.scala-sbt.org/release/docs/Getting-Started/Setup.html) installed)
 
-Pressing `ESC` will exit, otherwise it will run in a loop.
+`⌘-Q` will exit, otherwise it will run in a loop.
 
 
 Donations
