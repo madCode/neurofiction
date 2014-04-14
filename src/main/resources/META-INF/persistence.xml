@@ -13,7 +13,8 @@
             <property name="hibernate.connection.driver_class" value="org.postgresql.Driver"/>
             <property name="hibernate.connection.url" value="jdbc:postgresql://localhost:5432/outsight"/>
             <property name="hibernate.connection.charSet" value="UTF-8"/>
-            <property name="hibernate.connection.username" value="postgres"/>
+            <property name="hibernate.connection.username" value="Madeeha"/>
+	   <!-- <property name="hibernate.connection.password" value=""/> -->
         </properties>
     </persistence-unit>
 </persistence>
